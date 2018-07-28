@@ -1,0 +1,22 @@
+<div (mouseenter)="setLabelsVisible(true)" (mouseleave)="setLabelsVisible(false)">
+  <mat-accordion displayMode="flat">
+    <mat-expansion-panel
+      *ngFor="let item of items">
+      <mat-expansion-panel-header>
+        <mat-icon>{{item.icon}}</mat-icon>
+        <span *ngIf="showLabels">{{item.title}}</span>
+      </mat-expansion-panel-header>
+
+      <mat-nav-list>
+        <a
+          mat-list-item
+          *ngFor="let subItem of item.items"
+          href="#">
+          <mat-icon>{{subItem.icon}}</mat-icon>
+          <span *ngIf="showLabels">{{subItem.title}}</span>
+        </a>
+      </mat-nav-list>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
