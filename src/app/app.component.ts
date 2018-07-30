@@ -6,10 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  fixedSideNav = true;
 
-  switchSideNav(): boolean {
-    this.fixedSideNav = !this.fixedSideNav;
-    return this.fixedSideNav;
-  }
 }

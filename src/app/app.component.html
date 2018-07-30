@@ -1,16 +1,3 @@
 <div class="mat-app-background basic-container">
-  <mat-toolbar color="primary">
-    <button mat-icon-button (click)="main_nav.setSwitchingEnable(!switchSideNav())">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span>Cenit IO</span>
-  </mat-toolbar>
-  <mat-sidenav-container class="main-container" autosize>
-      <mat-sidenav #sidenav class="example-sidenav" mode="side" opened>
-          <app-navigation-main [switchLabelsEnabled]="!fixedSideNav" #main_nav></app-navigation-main>
-      </mat-sidenav>
-    <div class="example-sidenav-content">
-      Main Content
-    </div>
-  </mat-sidenav-container>
+  <router-outlet></router-outlet>
 </div>

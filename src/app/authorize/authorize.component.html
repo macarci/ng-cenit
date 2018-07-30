@@ -1,0 +1,9 @@
+<div class="authorize-content">
+  <div *ngIf="access_token === 'checking'; else authorize">
+    <mat-spinner></mat-spinner>
+  </div>
+  <ng-template #authorize>
+    <button mat-raised-button color="primary" (click)="autorize()">Sing in</button>
+    <label>Access Token: {{access_token}}</label>
+  </ng-template>
+</div>
