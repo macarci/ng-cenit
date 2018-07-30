@@ -61,8 +61,7 @@ export class AuthorizeComponent implements OnInit {
     const urlTree = new UrlTree();
     urlTree.root = new UrlSegmentGroup([new UrlSegment(path, {})], {});
     urlTree.queryParams = params;
-    // const identifier = '5b5cf77325d9850dfa01b3f86wnZvuGLtYMWKk_a_McbybhrskJdwZFiCga2uzz2pqiojzqgcGTuerRY42hz';
-    const identifier = '5b5dafbfce50762c01000008CSPNShUFhvpEXiF3G3gC8dMSYVuycaqJ1o3Dp3ymnMnh-ZpCJwYEQdnFAnuM';
-    return 'http://localhost:3000/app/' + identifier + new DefaultUrlSerializer().serialize(urlTree);
+    const cenitHost = 'http://localhost:3000';
+    return cenitHost + '/app/ng-cenit' + new DefaultUrlSerializer().serialize(urlTree);
   }
 }
