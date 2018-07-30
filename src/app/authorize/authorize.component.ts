@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, DefaultUrlSerializer, UrlSegment, UrlSegmentGroup, UrlTree} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-authorize',
@@ -9,59 +9,39 @@ import {HttpClient} from '@angular/common/http';
 })
 export class AuthorizeComponent implements OnInit {
 
-  authCode: string;
-  authState: string;
-  access_token = 'checking';
+  error: string;
 
   constructor(
-    private httpClient: HttpClient,
+    private authService: AuthService,
+    private router: Router,
     private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.authCode = this.route.snapshot.queryParams['code'];
-    this.authState = this.route.snapshot.queryParams['state'];
-    console.log(this.authCode);
-    console.log(this.authState);
-    if (this.authCode && this.authState === 'state') {
-      this.httpClient.post(this.cenitAppURL('token'), this.authCode).subscribe(
-        response => {
-          console.log(response);
-          this.access_token = response['access_token'];
-        },
-        error => {
-          console.log('Error', error);
-          this.access_token = 'failed';
-        },
-        () => {
-          if (this.access_token === 'checking') {
-            this.access_token = 'failed';
-          }
-        }
-      );
-    } else {
-      this.access_token = 'to be requested...';
+    const code = this.route.snapshot.queryParams['code'];
+    const state = this.route.snapshot.queryParams['state'];
+
+    if ((code && state) || this.authService.isAuthenticated()) {
+      this.check(code, state);
+    } else if (!this.error) {
+      console.log('Authorizing.......');
+      this.authService.authorize();
     }
   }
 
-  autorize() {
-    const url = this.authorizeUrl('state');
-    window.location.replace(url);
-  }
-
-  authorizeUrl(state): string {
-    return this.cenitAppURL('authorize', {
-      redirect_uri: 'http://localhost:4200/authorize',
+  check(code?: string, state?: string) {
+    this.authService.checkAuthState({
+      code: code,
       state: state
-    });
-  }
-
-  cenitAppURL(path, params?: Object): string {
-    params = params || {};
-    const urlTree = new UrlTree();
-    urlTree.root = new UrlSegmentGroup([new UrlSegment(path, {})], {});
-    urlTree.queryParams = params;
-    const cenitHost = 'http://localhost:3000';
-    return cenitHost + '/app/ng-cenit' + new DefaultUrlSerializer().serialize(urlTree);
+    }).subscribe(
+      null,
+      (error) => {
+        this.error = error;
+      },
+      () => {
+        console.log('Redirecting HOME...');
+        this.router.navigate(['/']);
+      }
+    );
   }
 }
