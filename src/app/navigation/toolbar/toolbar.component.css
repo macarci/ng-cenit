@@ -1,15 +1,3 @@
 .spacer {
   flex: 1 1 auto;
 }
-
-.avatar {
-  border-radius: 50%;
-}
-
-.avatar.small {
-  max-height: 30px;
-}
-
-.card {
-  padding: 5px;
-}

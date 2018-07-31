@@ -20,6 +20,7 @@ import {MainContainerComponent} from './containers/main-container/main-container
 import {AuthService} from './services/auth.service';
 import {AuthGuardService} from './services/auth-guard.service';
 import {ToolbarComponent} from './navigation/toolbar/toolbar.component';
+import {UserLinkComponent} from './navigation/toolbar/user-link/user-link.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -32,7 +33,8 @@ const appRoutes: Routes = [
     MainNavigationComponent,
     AuthorizeComponent,
     MainContainerComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    UserLinkComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,14 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <img class="avatar small" [src]="pictureUrl">
+</button>
+<mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false">
+  <div class="card">
+    <img class="avatar" [src]="pictureUrl">
+    <span>{{name}}</span>
+    <span>{{email}}</span>
+    <mat-divider></mat-divider>
+    <div class="card">
+      <button mat-raised-button color="warn" (click)="signOut()">Sing Out</button>
+    </div>
+  </div>
+</mat-menu>
