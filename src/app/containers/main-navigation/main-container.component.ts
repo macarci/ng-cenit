@@ -10,18 +10,24 @@ export class MainContainerComponent implements OnInit {
 
   fixedSideNav = true;
   pictureUrl: string;
-  signOutUrl: string;
+  name: string;
+  email: string;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
 
   switchSideNav(): boolean {
     this.fixedSideNav = !this.fixedSideNav;
     return this.fixedSideNav;
   }
 
-  ngOnInit(){
-    this.pictureUrl = this.authService.getPictureURL();
-    this.signOutUrl = this.authService.getSignOutURL();
+  ngOnInit() {
+    const idToken = this.authService.getIdToken();
+    if (idToken) {
+      this.pictureUrl = idToken['picture'];
+      this.name = idToken['name'];
+      this.email = idToken['email'];
+    }
   }
 
   signOut() {

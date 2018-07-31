@@ -11,7 +11,16 @@ const EXPIRATION_DATE_KEY = 'expiration_date';
 @Injectable()
 export class AuthService {
 
+  idToken: Object;
+
   constructor(private httpClient: HttpClient) {
+  }
+
+  getIdToken(): Object {
+    if (!this.idToken){
+      this.idToken = this.parseJwt(localStorage.getItem(ID_TOKEN_KEY));
+    }
+    return this.idToken;
   }
 
   storeAccessTokenInfo(accessTokenInfo) {
@@ -19,6 +28,7 @@ export class AuthService {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessTokenInfo[ACCESS_TOKEN_KEY]);
     localStorage.setItem(EXPIRATION_DATE_KEY, accessTokenInfo[EXPIRATION_DATE_KEY]);
     localStorage.setItem(ID_TOKEN_KEY, accessTokenInfo[ID_TOKEN_KEY]);
+    this.idToken = null;
     this.parseJwt(accessTokenInfo[ID_TOKEN_KEY]);
   }
 
@@ -102,14 +112,6 @@ export class AuthService {
   parseJwt(token) {
     const base64 = token.split('.')[1].replace('-', '+').replace('_', '/');
     return JSON.parse(window.atob(base64);
-  }
-
-  getPictureURL() {
-    const id_token = localStorage.getItem(ID_TOKEN_KEY);
-    if (id_token) {
-      return this.parseJwt(id_token)['picture'];
-    }
-    return null;
   }
 
   getSignOutURL() {
