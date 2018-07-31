@@ -3,6 +3,19 @@
     <mat-icon>menu</mat-icon>
   </button>
   <span>Cenit IO</span>
+  <div class="spacer"></div>
+  <button mat-button [matMenuTriggerFor]="menu">
+    <img class="avatar small" [src]="pictureUrl">
+  </button>
+  <mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false">
+    <div class="card">
+      <img class="avatar" [src]="pictureUrl">
+      <mat-divider></mat-divider>
+      <div class="card">
+        <button mat-raised-button color="warn" (click)="signOut()">Sing Out</button>
+      </div>
+    </div>
+  </mat-menu>
 </mat-toolbar>
 <mat-sidenav-container class="main-container" autosize>
   <mat-sidenav #sidenav class="example-sidenav" mode="side" opened>

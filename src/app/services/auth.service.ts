@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 
 const ACCESS_TOKEN_KEY = 'access_token';
+const ID_TOKEN_KEY = 'id_token';
 const EXPIRATION_DATE_KEY = 'expiration_date';
 
 @Injectable()
@@ -17,6 +18,8 @@ export class AuthService {
     console.log('Storing access token...', accessTokenInfo);
     localStorage.setItem(ACCESS_TOKEN_KEY, accessTokenInfo[ACCESS_TOKEN_KEY]);
     localStorage.setItem(EXPIRATION_DATE_KEY, accessTokenInfo[EXPIRATION_DATE_KEY]);
+    localStorage.setItem(ID_TOKEN_KEY, accessTokenInfo[ID_TOKEN_KEY]);
+    this.parseJwt(accessTokenInfo[ID_TOKEN_KEY]);
   }
 
   getAccessToken(): Observable<string> {
@@ -90,15 +93,37 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    let authed =  (localStorage.getItem(ACCESS_TOKEN_KEY) &&
+    const authed = (localStorage.getItem(ACCESS_TOKEN_KEY) &&
       localStorage.getItem(EXPIRATION_DATE_KEY)) != null;
     console.log('AUTHED', authed);
     return authed;
   }
 
+  parseJwt(token) {
+    const base64 = token.split('.')[1].replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64);
+  }
+
+  getPictureURL() {
+    const id_token = localStorage.getItem(ID_TOKEN_KEY);
+    if (id_token) {
+      return this.parseJwt(id_token)['picture'];
+    }
+    return null;
+  }
+
+  getSignOutURL() {
+    return environment.cenitHost + '/users/sign_out';
+  }
+
   authorize() {
     const url = this.authorizeUrl('state');
     window.location.replace(url);
+  }
+
+  signOut() {
+    localStorage.clear();
+    window.location.replace(environment.cenitHost + '/users/sign_out');
   }
 
   authorizeUrl(state): string {

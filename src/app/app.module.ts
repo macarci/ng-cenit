@@ -2,10 +2,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-  MatButtonModule,
+  MatButtonModule, MatCardModule,
   MatExpansionModule,
   MatIconModule,
-  MatListModule,
+  MatListModule, MatMenuModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatToolbarModule
@@ -43,7 +43,9 @@ const appRoutes: Routes = [
     MatExpansionModule,
     MatButtonModule,
     MatListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatCardModule,
+    MatMenuModule
   ],
   providers: [AuthService, AuthGuardService],
   bootstrap: [AppComponent]
