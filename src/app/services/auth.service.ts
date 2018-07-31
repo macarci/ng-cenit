@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   getIdToken(): Object {
-    if (!this.idToken){
+    if (!this.idToken) {
       this.idToken = this.parseJwt(localStorage.getItem(ID_TOKEN_KEY));
     }
     return this.idToken;
@@ -125,7 +125,7 @@ export class AuthService {
 
   signOut() {
     localStorage.clear();
-    window.location.replace(environment.cenitHost + '/users/sign_out');
+    window.location.replace(this.getSignOutURL());
   }
 
   authorizeUrl(state): string {
