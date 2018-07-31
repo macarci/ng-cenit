@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-navigation-main',
+  selector: 'cenit-navigation-main',
   templateUrl: './main-navigation.component.html',
   styleUrls: ['./main-navigation.component.css']
 })

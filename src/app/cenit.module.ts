@@ -11,7 +11,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 
-import {AppComponent} from './app.component';
+import {CenitComponent} from './cenit.component';
 import {MainNavigationComponent} from './navigation/main-navigation/main-navigation.component';
 import {HttpClientModule} from '@angular/common/http';
 import {AuthorizeComponent} from './authorize/authorize.component';
@@ -27,7 +27,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent,
+    CenitComponent,
     MainNavigationComponent,
     AuthorizeComponent,
     MainContainerComponent
@@ -48,7 +48,7 @@ const appRoutes: Routes = [
     MatMenuModule
   ],
   providers: [AuthService, AuthGuardService],
-  bootstrap: [AppComponent]
+  bootstrap: [CenitComponent]
 })
-export class AppModule {
+export class CenitModule {
 }

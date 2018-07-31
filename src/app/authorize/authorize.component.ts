@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 
 @Component({
-  selector: 'app-authorize',
+  selector: 'cenit-authorize',
   templateUrl: './authorize.component.html',
   styleUrls: ['./authorize.component.css']
 })

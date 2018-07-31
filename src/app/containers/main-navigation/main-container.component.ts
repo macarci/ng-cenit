@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 
 @Component({
-  selector: 'app-container-main',
+  selector: 'cenit-container-main',
   templateUrl: './main-container.component.html',
   styleUrls: ['./main-container.component.css']
 })
