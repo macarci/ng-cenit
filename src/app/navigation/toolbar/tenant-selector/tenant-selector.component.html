@@ -1,0 +1,12 @@
+<button mat-button [matMenuTriggerFor]="menu">
+  {{current_tenant.name}}
+  <mat-icon>arrow_drop_down</mat-icon>
+</button>
+<mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false">
+  <button
+    mat-menu-item
+    *ngFor="let tenant of tenants"
+    (click)="selectTenant(tenant.id)">
+    {{tenant.name}}
+  </button>
+</mat-menu>
