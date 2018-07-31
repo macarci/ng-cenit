@@ -1,10 +1,10 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button (click)="main_nav.setSwitchingEnable(!switchSideNav())">
+  <button mat-icon-button (click)="doClick()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>Cenit IO</span>
   <div class="spacer"></div>
-  <button mat-button [matMenuTriggerFor]="menu">
+  <button mat-icon-button [matMenuTriggerFor]="menu">
     <img class="avatar small" [src]="pictureUrl">
   </button>
   <mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false">
@@ -19,11 +19,3 @@
     </div>
   </mat-menu>
 </mat-toolbar>
-<mat-sidenav-container class="main-container" autosize>
-  <mat-sidenav #sidenav class="example-sidenav" mode="side" opened>
-    <cenit-navigation-main [switchLabelsEnabled]="!fixedSideNav" #main_nav></cenit-navigation-main>
-  </mat-sidenav>
-  <div class="example-sidenav-content">
-    Main Content goes here!
-  </div>
-</mat-sidenav-container>

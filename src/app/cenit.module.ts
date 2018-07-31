@@ -16,9 +16,10 @@ import {MainNavigationComponent} from './navigation/main-navigation/main-navigat
 import {HttpClientModule} from '@angular/common/http';
 import {AuthorizeComponent} from './authorize/authorize.component';
 import {RouterModule, Routes} from '@angular/router';
-import {MainContainerComponent} from './containers/main-navigation/main-container.component';
+import {MainContainerComponent} from './containers/main-container/main-container.component';
 import {AuthService} from './services/auth.service';
 import {AuthGuardService} from './services/auth-guard.service';
+import {ToolbarComponent} from './navigation/toolbar/toolbar.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -30,7 +31,8 @@ const appRoutes: Routes = [
     CenitComponent,
     MainNavigationComponent,
     AuthorizeComponent,
-    MainContainerComponent
+    MainContainerComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,

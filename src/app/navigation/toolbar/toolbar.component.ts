@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 
 @Component({
-  selector: 'cenit-container-main',
-  templateUrl: './main-container.component.html',
-  styleUrls: ['./main-container.component.css']
+  selector: 'cenit-toolbar',
+  templateUrl: './toolbar.component.html',
+  styleUrls: ['./toolbar.component.css']
 })
-export class MainContainerComponent implements OnInit {
+export class ToolbarComponent implements OnInit {
 
-  fixedSideNav = true;
+  @Output() menuClick = new EventEmitter<any>();
   pictureUrl: string;
   name: string;
   email: string;
@@ -16,9 +16,8 @@ export class MainContainerComponent implements OnInit {
   constructor(private authService: AuthService) {
   }
 
-  switchSideNav(): boolean {
-    this.fixedSideNav = !this.fixedSideNav;
-    return this.fixedSideNav;
+  doClick(){
+    this.menuClick.emit();
   }
 
   ngOnInit() {
