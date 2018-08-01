@@ -3,10 +3,24 @@
   <mat-icon>arrow_drop_down</mat-icon>
 </button>
 <mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false">
-  <button
-    mat-menu-item
-    *ngFor="let tenant of tenants"
-    (click)="selectTenant(tenant.id)">
-    {{tenant.name}}
-  </button>
+  <ng-template matMenuContent>
+    <cenit-lazy-loader [loader]="apiRequest" [lazy]="apiResponse" #lazy_loader>
+      <button
+        mat-menu-item
+        *ngFor="let tenant of tenants"
+        (click)="selectTenant(tenant.id)">
+        {{tenant.name}}
+      </button>
+    </cenit-lazy-loader>
+    <input
+      *ngIf="showQuery"
+      type="text"
+      class="query"
+      matInput
+      placeholder="Type a name"
+      (click)="$event.stopPropagation();"
+      (input)="configRequest();lazy_loader.reload()"
+      autofocus
+      [(ngModel)]="nameQuery">
+  </ng-template>
 </mat-menu>

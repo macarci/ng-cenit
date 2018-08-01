@@ -14,7 +14,7 @@ import {
 import {CenitComponent} from './cenit.component';
 import {MainNavigationComponent} from './navigation/main-navigation/main-navigation.component';
 import {HttpClientModule} from '@angular/common/http';
-import {AuthorizeComponent} from './authorize/authorize.component';
+import {AuthorizeComponent} from './components/authorize/authorize.component';
 import {RouterModule, Routes} from '@angular/router';
 import {MainContainerComponent} from './containers/main-container/main-container.component';
 import {AuthService} from './services/auth.service';
@@ -22,6 +22,9 @@ import {AuthGuardService} from './services/auth-guard.service';
 import {ToolbarComponent} from './navigation/toolbar/toolbar.component';
 import {UserLinkComponent} from './navigation/toolbar/user-link/user-link.component';
 import {TenantSelectorComponent} from './navigation/toolbar/tenant-selector/tenant-selector.component';
+import {LazyLoaderComponent} from './components/lazy-loader/lazy-loader.component';
+import {ApiService} from './services/api.service';
+import {FormsModule} from '@angular/forms';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -35,11 +38,13 @@ const appRoutes: Routes = [
     AuthorizeComponent,
     MainContainerComponent,
     ToolbarComponent,
-    UserLinkComponent
-    TenantSelectorComponent
+    UserLinkComponent,
+    TenantSelectorComponent,
+    LazyLoaderComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
@@ -53,7 +58,7 @@ const appRoutes: Routes = [
     MatCardModule,
     MatMenuModule
   ],
-  providers: [AuthService, AuthGuardService],
+  providers: [AuthService, AuthGuardService, ApiService],
   bootstrap: [CenitComponent]
 })
 export class CenitModule {
