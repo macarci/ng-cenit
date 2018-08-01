@@ -1,5 +1,8 @@
 <button mat-button [matMenuTriggerFor]="menu">
-  {{current_tenant.name}}
+  <label *ngIf="currentName; else loading_current">{{currentName}}</label>
+  <ng-template #loading_current>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </ng-template>
   <mat-icon>arrow_drop_down</mat-icon>
 </button>
 <mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false">

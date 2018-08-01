@@ -20,19 +20,25 @@ export class TenantSelectorComponent implements OnInit {
   nameQuery: string;
   typingTimer: number;
 
-  current_tenant = {
-    'id': '5b5daf91ce50762c01000003',
-    'name': 'Cenit UI'
-  };
+  currentName: string;
 
   constructor(private apiService: ApiService) {
   }
 
   ngOnInit() {
-    this.request();
+    this.requestCurrentTenant();
+    this.requestTenants();
   }
 
-  request() {
+  requestCurrentTenant() {
+    this.apiService.get(['setup', 'user', 'me']).subscribe(
+      user => {
+        this.currentName = user['account']['name'];
+      }
+    );
+  }
+
+  requestTenants() {
     const limit = 5;
     this.nameQuery = (this.nameQuery || '').toString().trim();
     const query = {
@@ -43,7 +49,7 @@ export class TenantSelectorComponent implements OnInit {
       console.log('Query ', this.nameQuery);
       query['name'] = JSON.stringify({'$regex': '(?i)' + this.nameQuery});
     }
-    this.apiRequest = this.apiService.find('setup', 'account', query);
+    this.apiRequest = this.apiService.get(['setup', 'account'], query);
     this.apiResponse = {
       next: response => {
         console.log('TENANTS', response);
@@ -62,15 +68,26 @@ export class TenantSelectorComponent implements OnInit {
 
   selectTenant(id: string) {
     this.nameQuery = null;
+    this.apiService.post(['setup', 'user', 'me'], {
+      account: {id: id}
+    }).subscribe(
+      () => {
+        this.requestCurrentTenant();
+      },
+      (error) => {
+        console.log('ERROR', error);
+        this.requestCurrentTenant();
+      }
+    );
   }
 
   typing() {
     if (this.typingTimer) {
       window.clearTimeout(this.typingTimer);
     }
-    this.typingTimer = setTimeout(()=> {
+    this.typingTimer = setTimeout(() => {
       this.typingTimer = null;
-      this.request();
+      this.requestTenants();
     }, 1000);
   }
 }
