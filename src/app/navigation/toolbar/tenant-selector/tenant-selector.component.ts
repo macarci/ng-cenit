@@ -35,7 +35,10 @@ export class TenantSelectorComponent implements OnInit {
   request() {
     const limit = 5;
     this.nameQuery = (this.nameQuery || '').toString().trim();
-    const query = {limit: limit.toString()};
+    const query = {
+      only: 'id,name',
+      limit: limit.toString()
+    };
     if (this.nameQuery.length > 0) {
       console.log('Query ', this.nameQuery);
       query['name'] = JSON.stringify({'$regex': '(?i)' + this.nameQuery});
@@ -43,7 +46,7 @@ export class TenantSelectorComponent implements OnInit {
     this.apiRequest = this.apiService.find('setup', 'account', query);
     this.apiResponse = {
       next: response => {
-        console.log('TENATSSSSSSSSSSSSSSSSS', response);
+        console.log('TENANTS', response);
         this.tenants = response['accounts'];
         this.showQuery = response['count'] > limit || this.nameQuery.length > 0;
       },
