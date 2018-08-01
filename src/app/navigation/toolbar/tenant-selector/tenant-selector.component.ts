@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AuthService} from '../../../services/auth.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from '../../../services/api.service';
 import {Observable, Observer} from 'rxjs';
+import {LazyLoaderComponent} from '../../../components/lazy-loader/lazy-loader.component';
 
 @Component({
   selector: 'cenit-tenant-selector',
@@ -10,12 +10,15 @@ import {Observable, Observer} from 'rxjs';
 })
 export class TenantSelectorComponent implements OnInit {
 
+  @ViewChild('lazy_loader') lazyLoader: LazyLoaderComponent;
+
   apiRequest: Observable<Object>;
   apiResponse: Observer<Object>;
 
   tenants: Object;
   showQuery: boolean;
   nameQuery: string;
+  typingTimer: number;
 
   current_tenant = {
     'id': '5b5daf91ce50762c01000003',
@@ -26,10 +29,10 @@ export class TenantSelectorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.configRequest();
+    this.request();
   }
 
-  configRequest() {
+  request() {
     const limit = 5;
     this.nameQuery = (this.nameQuery || '').toString().trim();
     const query = {limit: limit.toString()};
@@ -49,9 +52,22 @@ export class TenantSelectorComponent implements OnInit {
       complete: () => {
       }
     };
+    this.lazyLoader.loader = this.apiRequest;
+    this.lazyLoader.lazy = this.apiResponse;
+    this.lazyLoader.reload();
   }
 
   selectTenant(id: string) {
     this.nameQuery = null;
+  }
+
+  typing() {
+    if (this.typingTimer) {
+      window.clearTimeout(this.typingTimer);
+    }
+    this.typingTimer = setTimeout(()=> {
+      this.typingTimer = null;
+      this.request();
+    }, 1000);
   }
 }
