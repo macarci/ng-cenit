@@ -1,0 +1,11 @@
+<mat-spinner *ngIf="loading; else err_content"></mat-spinner>
+<ng-template #err_content>
+  <div *ngIf="error; else content">
+    <mat-icon>bug_report</mat-icon>
+    <span>{{error}}</span>
+  </div>
+  <ng-template #content>
+    <ng-content></ng-content>
+  </ng-template>
+</ng-template>
+
