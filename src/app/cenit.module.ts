@@ -5,7 +5,9 @@ import {
   MatButtonModule, MatCardModule,
   MatExpansionModule,
   MatIconModule,
-  MatListModule, MatMenuModule,
+  MatListModule,
+  MatMenuModule,
+  MatProgressBarModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatToolbarModule
@@ -56,7 +58,8 @@ const appRoutes: Routes = [
     MatListModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressBarModule
   ],
   providers: [AuthService, AuthGuardService, ApiService],
   bootstrap: [CenitComponent]

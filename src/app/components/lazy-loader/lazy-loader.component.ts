@@ -11,6 +11,7 @@ export class LazyLoaderComponent implements OnInit {
   loading = true;
   error: string;
 
+  @Input() type;
   @Input() loader: Observable<any>;
   @Input() lazy: Observer<any>;
 
