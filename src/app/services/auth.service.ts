@@ -12,6 +12,7 @@ const EXPIRATION_DATE_KEY = 'expiration_date';
 export class AuthService {
 
   idToken: Object;
+  accessTokenPromise: Promise<string>;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -32,36 +33,43 @@ export class AuthService {
     this.parseJwt(accessTokenInfo[ID_TOKEN_KEY]);
   }
 
-  getAccessToken(): Observable<string> {
-    console.log('Resolving access token...');
-    return new Observable<string>(subscriber => {
-      const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-      const expirationDate = new Date(localStorage.getItem(EXPIRATION_DATE_KEY));
-      if (accessToken && expirationDate) {
-        if (expirationDate < new Date()) {
-          console.log('Requesting new access token...');
-          this.httpClient.post(this.cenitAppURL('token'), accessToken).subscribe(
-            response => {
-              this.storeAccessTokenInfo(response);
-              subscriber.next(response[ACCESS_TOKEN_KEY]);
-            },
-            error => {
-              subscriber.error(error);
-            },
-            () => {
-              subscriber.complete();
-            }
-          );
+  async getAccessToken(): Promise<string> {
+    if (!this.accessTokenPromise) {
+      const current = Date.now();
+      console.log('Resolving access token...', current);
+      this.accessTokenPromise = new Promise<string>((resolve, reject) => {
+        const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+        const expirationDate = new Date(localStorage.getItem(EXPIRATION_DATE_KEY));
+        if (accessToken && expirationDate) {
+          if (expirationDate < new Date()) {
+            console.log('Requesting new access token with: ', accessToken);
+            this.httpClient.post(this.cenitAppURL('token'), accessToken).subscribe(
+              response => {
+                this.storeAccessTokenInfo(response);
+                console.log('New access token resolved: ', response[ACCESS_TOKEN_KEY]);
+                resolve(response[ACCESS_TOKEN_KEY]);
+                this.accessTokenPromise = null;
+                console.log('DONE ', current, '!');
+              },
+              error => {
+                reject(error);
+              }
+            );
+          } else {
+            console.log('Using current access token: ', accessToken);
+            resolve(accessToken);
+            this.accessTokenPromise = null;
+            console.log('DONE ', current, '!');
+          }
         } else {
-          console.log('Using current access token...');
-          subscriber.next(accessToken);
-          subscriber.complete();
+          console.log('No access token yet!');
+          reject('No credentials found');
+          this.accessTokenPromise = null;
+          console.log('DONE ', current, '!');
         }
-      } else {
-        console.log('No access token yet...');
-        subscriber.error('Not authorized');
-      }
-    });
+      });
+    }
+    return await this.accessTokenPromise;
   }
 
   checkAuthState(options?: Object): Observable<Object> {
@@ -85,15 +93,9 @@ export class AuthService {
           }
         );
       } else {
-        this.getAccessToken().subscribe(
-          null,
-          error => {
-            subscriber.error(error);
-          },
-          () => {
-            subscriber.complete();
-          }
-        );
+        this.getAccessToken()
+          .then((access_token) => subscriber.complete())
+          .catch(error => subscriber.error(error));
       }
     });
   }

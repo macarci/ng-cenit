@@ -14,9 +14,9 @@ export class ApiService {
 
   get(params: string[], query?: { [param: string]: string | string[] }): Observable<Object> {
     return new Observable<Object>(subscriber => {
-      this.authService.getAccessToken().subscribe(
+      this.authService.getAccessToken().then(
         access_token => {
-          console.log('Requesting API...');
+          console.log('Requesting API with access token', access_token);
           this.httpClient.get(this.apiURL(params), {
             headers: {
               Authorization: 'Bearer ' + access_token
@@ -33,15 +33,13 @@ export class ApiService {
             },
             () => subscriber.complete()
           );
-        },
-        error => subscriber.error(error)
-      );
+        }).catch(error => subscriber.error(error));
     });
   }
 
   post(params: string[], body: any, query?: { [param: string]: string | string[] }): Observable<Object> {
     return new Observable<Object>(subscriber => {
-      this.authService.getAccessToken().subscribe(
+      this.authService.getAccessToken().then(
         access_token => {
           console.log('Performing POST API...', body);
           this.httpClient.post(this.apiURL(params), body, {
@@ -60,9 +58,7 @@ export class ApiService {
             },
             () => subscriber.complete()
           );
-        },
-        error => subscriber.error(error)
-      );
+        }).catch(error => subscriber.error(error));
     });
   }
 
