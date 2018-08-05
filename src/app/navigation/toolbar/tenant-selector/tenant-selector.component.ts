@@ -81,6 +81,11 @@ export class TenantSelectorComponent implements OnInit {
     );
   }
 
+  menuClosed() {
+    this.nameQuery = null;
+    this.requestTenants();
+  }
+
   typing() {
     if (this.typingTimer) {
       window.clearTimeout(this.typingTimer);

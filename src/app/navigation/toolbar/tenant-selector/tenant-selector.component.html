@@ -5,7 +5,7 @@
   </ng-template>
   <mat-icon>arrow_drop_down</mat-icon>
 </button>
-<mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false">
+<mat-menu #menu="matMenu" xPosition="before" [overlapTrigger]="false" (closed)="menuClosed()">
     <cenit-lazy-loader #lazy_loader>
       <button
         mat-menu-item
