@@ -11,7 +11,9 @@ import {
   MatProgressSpinnerModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatTabsModule
+  MatTabsModule,
+  MatTableModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 import {CenitComponent} from './cenit.component';
@@ -29,6 +31,8 @@ import {LazyLoaderComponent} from './components/lazy-loader/lazy-loader.componen
 import {ApiService} from './services/api.service';
 import {FormsModule} from '@angular/forms';
 import {DataContainerComponent} from './containers/data-container/data-container.component';
+import {DataDashboardComponent} from './components/data-dashboard/data-dashboard.component';
+import {DataIndexComponent} from './components/data-index/data-index.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -48,7 +52,9 @@ const appRoutes: Routes = [
     UserLinkComponent,
     TenantSelectorComponent,
     LazyLoaderComponent,
-    DataContainerComponent
+    DataContainerComponent,
+    DataDashboardComponent,
+    DataIndexComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +72,9 @@ const appRoutes: Routes = [
     MatCardModule,
     MatMenuModule,
     MatProgressBarModule,
-    MatTabsModule
+    MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [AuthService, AuthGuardService, ApiService],
   bootstrap: [CenitComponent]

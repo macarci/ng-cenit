@@ -1,12 +1,17 @@
 <mat-tab-group [selectedIndex]="selectedIndex">
   <mat-tab *ngFor="let content of contents; let index = index" (selectedIndexChange)="setSelectedIndex($event)">
-    <ng-template mat-tab-label>
-      <mat-icon class="tab-icon">{{content['icon']}}</mat-icon>
-      {{content['path']}}
-      <button mat-icon-button color="warn" (click)="removeIndex(index)" *ngIf="index > 0">
-        <mat-icon class="tab-icon-close">close</mat-icon>
-      </button>
-    </ng-template>
-    {{content['path']}}
+    <div class="data-viewer">
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">{{content['icon']}}</mat-icon>
+        {{content['path']}}
+        <button mat-icon-button color="warn" (click)="removeIndex(index)" *ngIf="index > 0">
+          <mat-icon class="tab-icon-close">close</mat-icon>
+        </button>
+      </ng-template>
+      <div [ngSwitch]="content['type']">
+        <cenit-data-dashboard *ngSwitchCase="'dashboard'"></cenit-data-dashboard>
+        <cenit-data-index [dataSpec]="content" *ngSwitchCase="'index'"></cenit-data-index>
+      </div>
+    </div>
   </mat-tab>
 </mat-tab-group>

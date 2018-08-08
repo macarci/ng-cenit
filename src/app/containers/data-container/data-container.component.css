@@ -10,3 +10,7 @@
 .tab-icon-close {
   margin-left: 8px;
 }
+
+.data-viewer {
+  max-height: calc(100vh - 130px);;
+}

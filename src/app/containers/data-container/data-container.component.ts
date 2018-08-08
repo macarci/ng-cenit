@@ -15,6 +15,7 @@ export class DataContainerComponent implements OnInit {
       path: '/dashboard'
     }
   ];
+
   selectedIndex = 0;
 
   constructor(
@@ -35,7 +36,8 @@ export class DataContainerComponent implements OnInit {
     if (index === -1) {
       this.contents.push({
         icon: 'info',
-        path: this.router.url
+        path: this.router.url,
+        type: 'index'
       });
       index = this.contents.length - 1;
     }
