@@ -40,7 +40,7 @@ export class AuthorizeComponent implements OnInit {
       },
       () => {
         console.log('Redirecting HOME...');
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       }
     );
   }

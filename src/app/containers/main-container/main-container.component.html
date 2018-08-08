@@ -1,9 +1,9 @@
 <cenit-toolbar (menuClick)="main_nav.setSwitchingEnable(!switchSideNav())"></cenit-toolbar>
 <mat-sidenav-container class="main-container" autosize>
-  <mat-sidenav #sidenav class="example-sidenav" mode="side" opened>
+  <mat-sidenav #sidenav mode="side" opened>
     <cenit-navigation-main [switchLabelsEnabled]="!fixedSideNav" #main_nav></cenit-navigation-main>
   </mat-sidenav>
-  <div class="example-sidenav-content">
-    Main Content goes here!
+  <div>
+    <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>

@@ -16,21 +16,25 @@ export class MainNavigationComponent implements OnInit {
       icon: 'widgets',
       items: [{
         title: 'Object Types',
-        icon: 'class'
+        icon: 'class',
+        path: 'setup/json_data_type'
       }, {
         title: 'File Types',
-        icon: 'folder'
+        icon: 'folder',
+        path: 'setup/file_data_type'
       }]
     },
     {
-      title: 'Storage',
+      title: 'Connectors',
       icon: 'category',
       items: [{
-        title: 'Docs',
-        icon: 'library_books'
+        title: 'Connections',
+        icon: 'settings_input_component',
+        path: 'setup/connection'
       }, {
-        title: 'Files',
-        icon: 'archive'
+        title: 'Channels',
+        icon: 'import_export',
+        path: 'setup/channel'
       }]
     }];
 

@@ -10,7 +10,8 @@ import {
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatSidenavModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTabsModule
 } from '@angular/material';
 
 import {CenitComponent} from './cenit.component';
@@ -27,10 +28,14 @@ import {TenantSelectorComponent} from './navigation/toolbar/tenant-selector/tena
 import {LazyLoaderComponent} from './components/lazy-loader/lazy-loader.component';
 import {ApiService} from './services/api.service';
 import {FormsModule} from '@angular/forms';
+import {DataContainerComponent} from './containers/data-container/data-container.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
-  {path: '', component: MainContainerComponent, canActivate: [AuthGuardService]}
+  {path: 'dashboard', component: DataContainerComponent, canActivate: [AuthGuardService]},
+  {path: ':ns/:modelName', component: DataContainerComponent, canActivate: [AuthGuardService]},
+  {path: ':ns/:modelName/:id', component: DataContainerComponent, canActivate: [AuthGuardService]},
+  {path: '', redirectTo: '/authorize', pathMatch: 'full'}
 ];
 
 @NgModule({
@@ -42,7 +47,8 @@ const appRoutes: Routes = [
     ToolbarComponent,
     UserLinkComponent,
     TenantSelectorComponent,
-    LazyLoaderComponent
+    LazyLoaderComponent,
+    DataContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +65,8 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatCardModule,
     MatMenuModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatTabsModule
   ],
   providers: [AuthService, AuthGuardService, ApiService],
   bootstrap: [CenitComponent]

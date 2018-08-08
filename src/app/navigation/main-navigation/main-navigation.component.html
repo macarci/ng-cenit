@@ -11,7 +11,7 @@
         <a
           mat-list-item
           *ngFor="let subItem of item.items"
-          href="#">
+          [routerLink]="subItem.path">
           <mat-icon>{{subItem.icon}}</mat-icon>
           <span *ngIf="showLabels">{{subItem.title}}</span>
         </a>
