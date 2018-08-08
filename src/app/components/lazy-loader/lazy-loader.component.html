@@ -1,16 +1,17 @@
-<div *ngIf="loading; else err_content">
-  <mat-progress-bar mode="indeterminate" *ngIf="type == 'bar'; else spinner"></mat-progress-bar>
-  <ng-template #spinner>
-    <mat-spinner></mat-spinner>
+<div class="lazy mat-elevation-z8">
+  <div class="shade-loading" *ngIf="loading; else err_content">
+    <mat-spinner *ngIf="type == 'spinner'; else bar"></mat-spinner>
+    <ng-template #bar>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-template>
+  </div>
+  <ng-template #err_content>
+    <div *ngIf="error; else content">
+      <mat-icon>bug_report</mat-icon>
+      <span>{{error}}</span>
+    </div>
+    <ng-template #content>
+      <ng-content></ng-content>
+    </ng-template>
   </ng-template>
 </div>
-<ng-template #err_content>
-  <div *ngIf="error; else content">
-    <mat-icon>bug_report</mat-icon>
-    <span>{{error}}</span>
-  </div>
-  <ng-template #content>
-    <ng-content></ng-content>
-  </ng-template>
-</ng-template>
-
