@@ -53,7 +53,7 @@ export class TenantSelectorComponent implements OnInit {
     this.apiResponse = {
       next: response => {
         console.log('TENANTS', response);
-        this.tenants = response['accounts'];
+        this.tenants = response['items'];
         this.showQuery = response['count'] > limit || this.nameQuery.length > 0;
       },
       error: err => {
