@@ -17,11 +17,11 @@ export class MainNavigationComponent implements OnInit {
       items: [{
         title: 'Object Types',
         icon: 'class',
-        path: 'setup/json_data_type'
+        path: '/setup/json_data_type'
       }, {
         title: 'File Types',
         icon: 'folder',
-        path: 'setup/file_data_type'
+        path: '/setup/file_data_type'
       }]
     },
     {
@@ -30,11 +30,11 @@ export class MainNavigationComponent implements OnInit {
       items: [{
         title: 'Connections',
         icon: 'settings_input_component',
-        path: 'setup/connection'
+        path: '/setup/connection'
       }, {
         title: 'Channels',
         icon: 'import_export',
-        path: 'setup/channel'
+        path: '/setup/channel'
       }]
     }];
 

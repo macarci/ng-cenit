@@ -36,10 +36,13 @@ import {DataIndexComponent} from './components/data-index/data-index.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
-  {path: 'dashboard', component: DataContainerComponent, canActivate: [AuthGuardService]},
-  {path: ':ns/:modelName', component: DataContainerComponent, canActivate: [AuthGuardService]},
-  {path: ':ns/:modelName/:id', component: DataContainerComponent, canActivate: [AuthGuardService]},
-  {path: '', redirectTo: '/authorize', pathMatch: 'full'}
+  {
+    path: '', component: MainContainerComponent, canActivate: [AuthGuardService], children: [
+      {path: 'dashboard', component: DataContainerComponent},
+      {path: ':ns/:model', component: DataContainerComponent},
+      {path: ':ns/:model/:id', component: DataContainerComponent}
+    ]
+  }
 ];
 
 @NgModule({
