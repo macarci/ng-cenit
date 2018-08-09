@@ -3,7 +3,7 @@
     <mat-expansion-panel
       *ngFor="let item of items">
       <mat-expansion-panel-header>
-        <mat-icon>{{item.icon}}</mat-icon>
+        <mat-icon class="nav-icon">{{item.icon}}</mat-icon>
         <span *ngIf="showLabels">{{item.title}}</span>
       </mat-expansion-panel-header>
 
@@ -12,7 +12,7 @@
           mat-list-item
           *ngFor="let subItem of item.items"
           [routerLink]="subItem.path">
-          <mat-icon>{{subItem.icon}}</mat-icon>
+          <mat-icon class="nav-icon">{{subItem.icon}}</mat-icon>
           <span *ngIf="showLabels">{{subItem.title}}</span>
         </a>
       </mat-nav-list>
