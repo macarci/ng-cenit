@@ -1,6 +1,9 @@
 .table-container {
   position: relative;
-  height: 100%;
+  max-height: calc(100vh - 186px);
   overflow: auto;
-  padding: 5px;
+}
+
+table {
+  width: 100%;
 }
