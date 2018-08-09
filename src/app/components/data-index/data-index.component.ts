@@ -17,7 +17,6 @@ export class DataIndexComponent implements OnInit {
   @Input() dataSpec;
 
   params: string[];
-,
 
   apiRequest: Observable<Object>;
   apiResponse: Observer<Object>;
@@ -36,7 +35,6 @@ export class DataIndexComponent implements OnInit {
     this.params.splice(0, 1);
     this.requestData();
   }
-
 
   requestData() {
     const page = this.paginator ? this.paginator.pageIndex + 1 : 1;
