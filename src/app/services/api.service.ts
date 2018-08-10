@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, Observer} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {AuthService} from './auth.service';
 
@@ -12,23 +12,24 @@ export class ApiService {
     private authService: AuthService) {
   }
 
-  get(params: string[], query?: { [param: string]: string | string[] }): Observable<Object> {
-    return new Observable<Object>(subscriber => {
+  get<T>(params: string[], query?: { [param: string]: string | string[] }, viewport?: string): Observable<T> {
+    return new Observable<T>((subscriber: Observer<T>) => {
       this.authService.getAccessToken().then(
         access_token => {
-          console.log('Requesting API with access token', access_token);
-          this.httpClient.get(this.apiURL(params), {
+          const options = {
             headers: {
               Authorization: 'Bearer ' + access_token
             },
             params: query
-          }).subscribe(
-            response => {
-              console.log('Receiving API response...', response);
+          };
+          if (viewport) {
+            options.headers['X-Render-Options'] = {viewport: viewport};
+          }
+          this.httpClient.get(this.apiURL(params), options).subscribe(
+            (response: T) => {
               subscriber.next(response);
             },
             error => {
-              console.log('API response with error...');
               subscriber.error(error);
             },
             () => subscriber.complete()
@@ -41,7 +42,6 @@ export class ApiService {
     return new Observable<Object>(subscriber => {
       this.authService.getAccessToken().then(
         access_token => {
-          console.log('Performing POST API...', body);
           this.httpClient.post(this.apiURL(params), body, {
             headers: {
               Authorization: 'Bearer ' + access_token
@@ -49,17 +49,19 @@ export class ApiService {
             params: query
           }).subscribe(
             response => {
-              console.log('Receiving POST API response...', response);
               subscriber.next(response);
             },
             error => {
-              console.log('POST API response with error...');
               subscriber.error(error);
             },
             () => subscriber.complete()
           );
         }).catch(error => subscriber.error(error));
     });
+  }
+
+  digest(params: string[], body: any = '', query?: { [param: string]: string | string[] }): Observable<Object> {
+    return this.post([...params, 'digest'], body, query);
   }
 
   apiURL(params: string[]) {

@@ -33,6 +33,7 @@ import {FormsModule} from '@angular/forms';
 import {DataContainerComponent} from './containers/data-container/data-container.component';
 import {DataDashboardComponent} from './components/data-dashboard/data-dashboard.component';
 import {DataIndexComponent} from './components/data-index/data-index.component';
+import {DataTypeService} from './services/data-type.service';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -79,7 +80,12 @@ const appRoutes: Routes = [
     MatTableModule,
     MatPaginatorModule
   ],
-  providers: [AuthService, AuthGuardService, ApiService],
+  providers: [
+    AuthService,
+    AuthGuardService,
+    ApiService,
+    DataTypeService
+  ],
   bootstrap: [CenitComponent]
 })
 export class CenitModule {
