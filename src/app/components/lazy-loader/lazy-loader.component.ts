@@ -1,47 +1,54 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Observable, Observer} from 'rxjs';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Observer, Subscription} from 'rxjs';
 
 @Component({
   selector: 'cenit-lazy-loader',
   templateUrl: './lazy-loader.component.html',
   styleUrls: ['./lazy-loader.component.css']
 })
-export class LazyLoaderComponent implements OnInit {
+export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> {
 
   loading = true;
-  error: string;
-
-  @Input() type;
+  errorDescription: string;
+  @Input() status: string;
+  @Input() type: string;
   @Input() loader: Observable<any>;
   @Input() lazy: Observer<any>;
+
+  subscription: Subscription;
 
   ngOnInit() {
     this.load();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe();
+  }
+
+  unsubscribe() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   load() {
-    console.log('Lazy loading...');
+    this.unsubscribe();
     if (this.loader) {
-      console.log('Subscribing loader...');
-      this.loader.subscribe(
+      this.subscription = this.loader.subscribe(
         value => {
           if (this.lazy) {
-            console.log('Notifying lazy...');
             this.lazy.next(value);
           }
         },
         error => {
-          console.log('Stop loading on error:', error);
-          this.loading = false;
-          this.error = error.toString();
-          if (this.lazy) {
+          this.error(error);
+          if (this.lazy && this.lazy !== this) {
             this.lazy.error(error);
           }
         },
         () => {
-          console.log('Stop loading. Complete!');
-          this.loading = false;
-          if (this.lazy) {
+          this.complete();
+          if (this.lazy && this.lazy !== this) {
             this.lazy.complete();
           }
         }
@@ -50,7 +57,22 @@ export class LazyLoaderComponent implements OnInit {
   }
 
   reload() {
+    this.errorDescription = null;
     this.loading = true;
     this.load();
+  }
+
+  next(value: string) {
+    this.status = value;
+  }
+
+  error(err: any) {
+    this.loading = false;
+    this.errorDescription = err.toString();
+  }
+
+  complete() {
+    this.loading = false;
+    this.status = 'Completed!';
   }
 }
