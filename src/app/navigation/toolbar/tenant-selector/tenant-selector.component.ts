@@ -46,13 +46,11 @@ export class TenantSelectorComponent implements OnInit {
       limit: limit.toString()
     };
     if (this.nameQuery.length > 0) {
-      console.log('Query ', this.nameQuery);
       query['name'] = JSON.stringify({'$regex': '(?i)' + this.nameQuery});
     }
     this.apiRequest = this.apiService.get(['setup', 'account'], query);
     this.apiResponse = {
       next: response => {
-        console.log('TENANTS', response);
         this.tenants = response['items'];
         this.showQuery = response['count'] > limit || this.nameQuery.length > 0;
       },
@@ -75,7 +73,6 @@ export class TenantSelectorComponent implements OnInit {
         this.requestCurrentTenant();
       },
       (error) => {
-        console.log('ERROR', error);
         this.requestCurrentTenant();
       }
     );
