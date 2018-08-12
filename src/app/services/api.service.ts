@@ -12,20 +12,25 @@ export class ApiService {
     private authService: AuthService) {
   }
 
-  get<T>(params: string[], query?: { [param: string]: string | string[] }, viewport?: string): Observable<T> {
+  get<T>(params: string[], options?: { headers?: Object; query?: Object; template?: Object }): Observable<T> {
+    options = options || {};
     return new Observable<T>((subscriber: Observer<T>) => {
       this.authService.getAccessToken().then(
         access_token => {
-          const options = {
+          const reqOptions = {
             headers: {
               Authorization: 'Bearer ' + access_token
-            },
-            params: query
+            }
           };
-          if (viewport) {
-            options.headers['X-Render-Options'] = {viewport: viewport};
+          if (options.query) {
+            reqOptions['params'] = options.query;
           }
-          this.httpClient.get(this.apiURL(params), options).subscribe(
+          const templateOptions = options.template || {};
+          if (!templateOptions.hasOwnProperty('raw_properties')) {
+            templateOptions['raw_properties'] = true;
+          }
+          reqOptions.headers['X-Template-Options'] = JSON.stringify(templateOptions);
+          this.httpClient.get(this.apiURL(params), reqOptions).subscribe(
             (response: T) => {
               subscriber.next(response);
             },
