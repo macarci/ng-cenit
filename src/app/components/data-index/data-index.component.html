@@ -1,19 +1,31 @@
-<cenit-lazy-loader #lazy_loader>
-  <div class="table-container">
-    <table mat-table [dataSource]="items">
-      <ng-container
-        *ngFor="let prop of properties"
-        [matColumnDef]="prop.name">
-        <th mat-header-cell *matHeaderCellDef>{{prop.name}}</th>
-        <td mat-cell *matCellDef="let row">{{row[prop.name]}}</td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </div>
-  <mat-paginator
-    [length]="count"
-    [pageSize]="pageSize"
-    (page)="requestData(true)"
-    *ngIf="count > pageSize"></mat-paginator>
-</cenit-lazy-loader>
+<mat-toolbar>
+  <div class="spacer"></div>
+  <button mat-icon-button (click)="actionsDrawer.toggle()">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-sidenav-container class="data-container" hasBackdrop="false">
+  <mat-sidenav #actionsDrawer mode="over" position="end">
+    New, Edit...
+  </mat-sidenav>
+  <cenit-lazy-loader #lazy_loader>
+    <div class="table-container">
+      <table mat-table [dataSource]="items">
+        <ng-container
+          *ngFor="let prop of properties"
+          [matColumnDef]="prop.name">
+          <th mat-header-cell *matHeaderCellDef>{{prop.name}}</th>
+          <td mat-cell *matCellDef="let row">{{row[prop.name]}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <mat-paginator
+      [hidePageSize]="true"
+      [length]="count"
+      [pageSize]="pageSize"
+      (page)="requestData(true)"
+      *ngIf="count > pageSize"></mat-paginator>
+  </cenit-lazy-loader>
+</mat-sidenav-container>

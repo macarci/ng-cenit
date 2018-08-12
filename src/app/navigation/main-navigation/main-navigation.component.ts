@@ -17,11 +17,11 @@ export class MainNavigationComponent implements OnInit {
       items: [{
         title: 'Object Types',
         icon: 'class',
-        path: '/setup/json_data_type'
+        path: '/json_data_type'
       }, {
         title: 'File Types',
         icon: 'folder',
-        path: '/setup/file_data_type'
+        path: '/file_data_type'
       }]
     },
     {
@@ -30,11 +30,19 @@ export class MainNavigationComponent implements OnInit {
       items: [{
         title: 'Connections',
         icon: 'settings_input_component',
-        path: '/setup/connection'
+        path: '/connection'
       }, {
         title: 'Channels',
         icon: 'import_export',
-        path: '/setup/channel'
+        path: '/cenit_ui~refresh_token'
+      },{
+        title: 'Channel Item',
+        icon: 'import_export',
+        path: '/cenit_ui~refresh_token/1'
+      },{
+        title: 'Dashboard',
+        icon: 'dashboard',
+        path: '/dashboard'
       }]
     }];
 

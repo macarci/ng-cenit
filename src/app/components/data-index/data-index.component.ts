@@ -32,8 +32,12 @@ export class DataIndexComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.params = this.dataSpec['path'].split('/');
-    this.params.splice(0, 1);
+    const params = this.dataSpec['model'].split('~');
+    if (params.length === 1) {
+      this.params = ['setup', params[0]];
+    } else {
+      this.params = [params.shift(), params.join('~')];
+    }
     this.lazyLoader.lazy = this.lazyLoader;
     this.requestData();
   }

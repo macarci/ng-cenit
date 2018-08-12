@@ -1,9 +1,17 @@
+.data-container {
+  height: calc(100vh - 194px);
+}
+
 .table-container {
   position: relative;
-  max-height: calc(100vh - 186px);
+  max-height: calc(100vh - 250px);
   overflow: auto;
 }
 
 table {
   width: 100%;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

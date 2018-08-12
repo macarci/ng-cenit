@@ -34,14 +34,13 @@ import {DataContainerComponent} from './containers/data-container/data-container
 import {DataDashboardComponent} from './components/data-dashboard/data-dashboard.component';
 import {DataIndexComponent} from './components/data-index/data-index.component';
 import {DataTypeService} from './services/data-type.service';
+import {DataItemComponent} from './components/data-item/data-item.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
   {
     path: '', component: MainContainerComponent, canActivate: [AuthGuardService], children: [
-      {path: 'dashboard', component: DataContainerComponent},
-      {path: ':ns/:model', component: DataContainerComponent},
-      {path: ':ns/:model/:id', component: DataContainerComponent}
+      {path: '**', component: DataContainerComponent}
     ]
   }
 ];
@@ -58,7 +57,8 @@ const appRoutes: Routes = [
     LazyLoaderComponent,
     DataContainerComponent,
     DataDashboardComponent,
-    DataIndexComponent
+    DataIndexComponent,
+    DataItemComponent
   ],
   imports: [
     BrowserModule,
