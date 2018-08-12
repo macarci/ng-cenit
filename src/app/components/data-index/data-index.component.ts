@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {LazyLoaderComponent} from '../lazy-loader/lazy-loader.component';
 import {MatPaginator} from '@angular/material';
 import {DataType, DataTypeService, Property} from '../../services/data-type.service';
+import {IndexContent} from '../../containers/data-container/data-container.component';
 
 @Component({
   selector: 'cenit-data-index',
@@ -15,7 +16,7 @@ export class DataIndexComponent implements OnInit {
   @ViewChild('lazy_loader') lazyLoader: LazyLoaderComponent;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  @Input() dataSpec;
+  @Input() indexContent: IndexContent;
 
   params: string[];
 
@@ -32,12 +33,7 @@ export class DataIndexComponent implements OnInit {
   }
 
   ngOnInit() {
-    const params = this.dataSpec['model'].split('~');
-    if (params.length === 1) {
-      this.params = ['setup', params[0]];
-    } else {
-      this.params = [params.shift(), params.join('~')];
-    }
+    this.params = this.indexContent.getApiParams();
     this.lazyLoader.lazy = this.lazyLoader;
     this.requestData();
   }

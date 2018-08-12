@@ -1,9 +1,7 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from '../../services/api.service';
-import {Observable} from 'rxjs';
-import {LazyLoaderComponent} from '../lazy-loader/lazy-loader.component';
-import {MatPaginator} from '@angular/material';
-import {DataType, DataTypeService, Property} from '../../services/data-type.service';
+import {DataTypeService} from '../../services/data-type.service';
+import {ItemContent} from '../../containers/data-container/data-container.component';
 
 @Component({
   selector: 'cenit-data-item',
@@ -12,7 +10,7 @@ import {DataType, DataTypeService, Property} from '../../services/data-type.serv
 })
 export class DataItemComponent implements OnInit {
 
-  @Input() dataSpec;
+  @Input() itemContent: ItemContent;
 
   constructor(private apiService: ApiService, private dataTypeService: DataTypeService) {
   }

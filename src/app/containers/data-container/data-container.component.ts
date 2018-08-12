@@ -1,11 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {UrlSegment} from '@angular/router/src/url_tree';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
-
-const ROOT_ACTIONS = ['dashboard'];
-const INDEX_ACTIONS = ['new'];
-const ITEM_ACTIONS = ['edit'];
 
 @Component({
   selector: 'cenit-container-data',
@@ -14,15 +9,9 @@ const ITEM_ACTIONS = ['edit'];
 })
 export class DataContainerComponent implements OnInit {
 
-  contents: Array<Object> = [
-    {
-      type: 'dashboard',
-      key: 'dashboard',
-      icon: 'dashboard'
-    }
-  ];
+  contents: Array<DataContent> = [new DataContent('dashboard')];
 
-  currentKey = 'dashboard';
+  currentKey = this.contents[0].getKey();
   selectedIndex = 0;
 
   constructor(
@@ -32,50 +21,18 @@ export class DataContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.url.subscribe((urlSegments: UrlSegment[]) => {
+    this.route.url.subscribe(() => {
       this.activateCurrentPath();
     });
   }
 
   activateCurrentPath() {
-    const params = this.router.url.split('/');
-    params.shift();
-    const content = {};
-    if (params.length === 3) {
-      content['type'] = 'item';
-      content['action'] = params[2];
-      content['itemId'] = params[1;
-      content['model'] = params[0];
-      this.currentKey = `${params[0]}/${params[1]}`;
-    } else {
-      this.currentKey = params[0];
-      if (params.length === 2) {
-        if (INDEX_ACTIONS.indexOf(params[1]) === -1) {
-          content['type'] = 'item';
-          content['action'] = '';
-          content['itemId'] = params[1];
-          content['model'] = params[0];
-          this.currentKey = `${params[0]}/${params[1]}`;
-        } else {
-          content['type'] = 'index';
-          content['action'] = params[1];
-          content['model'] = params[0];
-        }
-      } else {
-        if (ROOT_ACTIONS.indexOf(params[0]) === -1) {
-          content['type'] = 'index';
-          content['action'] = '';
-          content['model'] = params[0];
-        } else {
-          content['type'] = params[0];
-        }
-      }
-    }
-    let index = this.contents.findIndex((c) => {
-      return c['key'] === this.currentKey;
+    const content = DataContent.from(this.router.url);
+    this.currentKey = content.getKey();
+    let index = this.contents.findIndex((c: DataContent) => {
+      return c.getKey() === this.currentKey;
     });
     if (index === -1) {
-      content['key'] = this.currentKey;
       this.contents.push(content);
       index = this.contents.length - 1;
     }
@@ -85,10 +42,10 @@ export class DataContainerComponent implements OnInit {
   }
 
   removeIndex(index: number) {
-    const indexKey = this.contents[index]['key'];
+    const indexKey = this.contents[index].getKey();
     this.contents.splice(index, 1);
     if (indexKey === this.currentKey) {
-      this.router.navigate([this.contents[index - 1]['key']]);
+      this.router.navigate(this.contents[index - 1].getPath());
     } else if (index < this.selectedIndex) {
       setTimeout(() => {
         this.selectedIndex--;
@@ -98,7 +55,102 @@ export class DataContainerComponent implements OnInit {
 
   setSelectedIndex(index: number) {
     this.selectedIndex = index;
-    const path = '/' + this.contents[index]['key'];
-    this.location.replaceState(path);
+    this.location.replaceState(this.contents[index].getPath().join('/'));
+  }
+}
+
+export class DataContent {
+
+  static ACTIONS = ['dashboard'];
+
+  static from(url: string): DataContent {
+    const params = url.split('/');
+    params.shift();
+    if (params.length === 3) {
+      return new ItemContent(params[0], params[1], params[2]);
+    } else {
+      if (params.length === 2) {
+        if (IndexContent.ACTIONS.indexOf(params[1]) === -1) {
+          return new ItemContent(params[0], params[1], '');
+        } else {
+          return new IndexContent(params[0], params[1]);
+        }
+      } else {
+        if (DataContent.ACTIONS.indexOf(params[0]) === -1) {
+          return new IndexContent(params[0], '');
+        } else {
+          return new DataContent(params[0]);
+        }
+      }
+    }
+  }
+
+  constructor(private type: string) {
+  }
+
+  getKey(): string {
+    return this.type;
+  }
+
+  getPath(): string[] {
+    return [this.type];
+  }
+}
+
+export class ModelContent extends DataContent {
+  protected constructor(type: string, protected model: string, public action: string) {
+    super(type);
+  }
+
+  getKey(): string {
+    return this.model;
+  }
+
+  getApiParams(): string[] {
+    const params = this.model.split('~');
+    if (params.length === 1) {
+      return ['setup', params[0]];
+    }
+    return [params.shift(), params.join('~')];
+  }
+}
+
+export class IndexContent extends ModelContent {
+
+  static ACTIONS = ['new'];
+
+  constructor(model: string, action: string) {
+    super('index', model, action);
+  }
+
+  getPath(): string[] {
+    if (this.action.length === 0) {
+      return [this.model];
+    }
+    return [this.model, this.action];
+  }
+}
+
+export class ItemContent extends ModelContent {
+
+  static ACTIONS = ['edit'];
+
+  constructor(model: string, private id: any, action: string) {
+    super('item', model, action);
+  }
+
+  getKey(): string {
+    return super.getKey() + '/' + this.id;
+  }
+
+  getPath(): string[] {
+    if (this.action.length === 0) {
+      return [this.model, this.id];
+    }
+    return [this.model, this.id, this.action];
+  }
+
+  getApiParams(): string[] {
+    return super.getApiParams().concat(this.id);
   }
 }
