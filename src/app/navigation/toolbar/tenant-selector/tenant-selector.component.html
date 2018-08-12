@@ -10,7 +10,7 @@
       <button
         mat-menu-item
         *ngFor="let tenant of tenants"
-        (click)="selectTenant(tenant.id)">
+        (click)="selectTenant(tenant._id)">
         {{tenant.name}}
       </button>
     </cenit-lazy-loader>
