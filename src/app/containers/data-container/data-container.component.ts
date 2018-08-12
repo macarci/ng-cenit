@@ -84,20 +84,6 @@ export class DataContainerComponent implements OnInit {
     });
   }
 
-  private keyFor(url: string): string {
-    const params = url.split('/');
-    params.shift();
-    if (params.length === 3) {
-      return `${params[0]}/${params[1]}`;
-    }
-    if (params.length === 2) {
-      if (INDEX_ACTIONS.indexOf(params[1]) === -1) {
-        return `${params[0]}/${params[1]}`;
-      }
-    }
-    return params[0];
-  }
-
   removeIndex(index: number) {
     const indexKey = this.contents[index]['key'];
     this.contents.splice(index, 1);

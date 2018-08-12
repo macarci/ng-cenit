@@ -10,11 +10,9 @@ export class DataTypeService {
   getById(id: string): Promise<DataType> {
     return new Promise<DataType>(
       (resolve, reject) => {
-        console.log('Req Data Type ', id);
         this.apiService.get(['setup', 'data_type', id], {template: {viewport: '{_id namespace name title}'}})
           .subscribe(
             (response) => {
-              console.log('Data Type ', id, response);
               const dataType = new DataType(
                 response['_id'],
                 response['namespace'],
