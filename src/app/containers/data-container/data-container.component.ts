@@ -85,7 +85,7 @@ export class DataContent {
     }
   }
 
-  constructor(private type: string) {
+  constructor(readonly type: string) {
   }
 
   getKey(): string {

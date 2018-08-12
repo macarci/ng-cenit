@@ -35,6 +35,8 @@ import {DataDashboardComponent} from './components/data-dashboard/data-dashboard
 import {DataIndexComponent} from './components/data-index/data-index.component';
 import {DataTypeService} from './services/data-type.service';
 import {DataItemComponent} from './components/data-item/data-item.component';
+import {IndexListComponent} from './components/data-index/index/index-list.component';
+import {IndexCreateComponent} from './components/data-index/create/index-create.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -58,6 +60,8 @@ const appRoutes: Routes = [
     DataContainerComponent,
     DataDashboardComponent,
     DataIndexComponent,
+    IndexListComponent,
+    IndexCreateComponent,
     DataItemComponent
   ],
   imports: [

@@ -3,3 +3,7 @@
 .mat-nav-list .mat-list-item .mat-list-item-content {
   padding: unset !important;
 }
+
+.header-less-tabs .mat-tab-group .mat-tab-header {
+  display: none;
+}
