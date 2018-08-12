@@ -42,30 +42,31 @@ export class DataIndexComponent implements OnInit {
     this.data = this.dataType = null;
     const page = this.paginator ? this.paginator.pageIndex + 1 : 1;
     this.lazyLoader.loader = new Observable<String>(subscriber => {
+      const handleError = (error) => {
+        subscriber.error(error);
+      };
       subscriber.next('Loading data...');
-      this.apiService.get(this.params, {
-        page: page.toString()
-      }).subscribe(
+      this.apiService.get(this.params, {query: {page: page}}).subscribe(
         response => {
           this.data = response;
           this.items = response['items'];
           this.count = response['count'];
           subscriber.next('Resolving data type...');
-          this.dataTypeService.getById(this.data['data_type']['id'])
-            .then((dataType: DataType) => {
-              subscriber.next('Data type resolved!');
-              this.dataType = dataType;
-              subscriber.next('Loading properties...');
-              dataType.getProps().then(
-                (props: Property[]) => {
-                  this.properties = props;
-                  this.displayedColumns = props.map(p => p.name);
-                  subscriber.complete();
-                }
-              ).catch(error => subscriber.error(error));
-            }).catch(error => subscriber.error(error));
+          this.dataTypeService.getById(this.data['data_type']['_id'])
+            .then(
+              (dataType: DataType) => {
+                this.dataType = dataType;
+                subscriber.next('Loading properties...');
+                dataType.getProps().then(
+                  (props: Property[]) => {
+                    this.properties = props;
+                    this.displayedColumns = props.map(p => p.name);
+                    subscriber.complete();
+                  }
+                ).catch(handleError);
+              }).catch(handleError);
         },
-        error => subscriber.error(error)
+        handleError
       );
     });
     if (reload) {
