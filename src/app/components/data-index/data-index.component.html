@@ -1,4 +1,6 @@
 <mat-toolbar>
+  <mat-icon>{{actions[currentIndex].icon}}</mat-icon>
+  {{actions[currentIndex].name}}
   <div class="spacer"></div>
   <button mat-icon-button (click)="actionsDrawer.toggle()">
     <mat-icon>more_vert</mat-icon>
@@ -8,19 +10,22 @@
   <mat-sidenav #actionsDrawer mode="over" position="end">
     <mat-list>
       <mat-list-item *ngFor="let action of actions; let index=index">
-        <button mat-button (click)="selectAction(index)">{{action || 'Index'}}</button>
+        <button mat-button (click)="selectAction(index)">
+          <mat-icon>{{action.icon}}</mat-icon>
+          {{action.name}}
+        </button>
       </mat-list-item>
     </mat-list>
   </mat-sidenav>
   <!--<mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="setSelectedIndex($event)">-->
   <div class="header-less-tabs">
-    <mat-tab-group [selectedIndex]="currentAction">
+    <mat-tab-group [selectedIndex]="currentIndex">
       <mat-tab *ngFor="let action of actions">
         <ng-template mat-tab-label>
-          <mat-icon class="tab-icon">{{action}}</mat-icon>
-          {{action}}
+          <mat-icon class="tab-icon">{{action.icon}}</mat-icon>
+          {{action.name}}
         </ng-template>
-        <div [ngSwitch]="action">
+        <div [ngSwitch]="action.key">
           <cenit-data-index-list [indexContent]="indexContent" *ngSwitchCase="''"></cenit-data-index-list>
           <cenit-data-index-create *ngSwitchCase="'new'"></cenit-data-index-create>
         </div>

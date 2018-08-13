@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {IndexContent} from '../../containers/data-container/data-container.component';
+import {Action, IndexContent} from '../../containers/data-container/data-container.component';
 import {MatSidenav} from '@angular/material';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'cenit-data-index',
@@ -13,15 +14,21 @@ export class DataIndexComponent implements OnInit {
 
   @Input() indexContent: IndexContent;
 
-  actions: Array<string>;
-  currentAction = 0;
+  actions: Array<Action>;
+  currentIndex = 0;
+
+  constructor(private location: Location) {
+  }
 
   ngOnInit() {
-    this.actions = [''].concat(IndexContent.ACTIONS);
+    this.actions = IndexContent.ACTIONS;
+    this.currentIndex = this.indexContent.getActionIndex();
   }
 
   selectAction(index: number) {
-    this.currentAction = index;
+    this.currentIndex = index;
     this.actionsDrawer.close();
+    this.indexContent.action = this.actions[index];
+    this.location.replaceState(this.indexContent.getPath().join('/'));
   }
 }

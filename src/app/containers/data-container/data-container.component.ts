@@ -59,33 +59,49 @@ export class DataContainerComponent implements OnInit {
   }
 }
 
+export class Action {
+  constructor(
+    readonly key: string,
+    readonly name: string,
+    readonly  icon: string
+  ) {
+  }
+}
+
 export class DataContent {
 
-  static ACTIONS = ['dashboard'];
+  static ACTIONS: Array<Action> = [
+    new Action('dashboard', 'Dashboard', 'dashboard')
+  ];
 
   static from(url: string): DataContent {
     const params = url.split('/');
-    params.shift();
+    while (params.length > 0 && params[0].length === 0) {
+      params.shift();
+    }
     if (params.length === 3) {
       return new ItemContent(params[0], params[1], params[2]);
     } else {
       if (params.length === 2) {
-        if (IndexContent.ACTIONS.indexOf(params[1]) === -1) {
+        if (IndexContent.ACTIONS.findIndex((a: Action) => a.key === params[1]) === -1) {
           return new ItemContent(params[0], params[1], '');
         } else {
           return new IndexContent(params[0], params[1]);
         }
       } else {
-        if (DataContent.ACTIONS.indexOf(params[0]) === -1) {
+        if (params.length > 0 && DataContent.ACTIONS.findIndex((a: Action) => a.key === params[0]) === -1) {
           return new IndexContent(params[0], '');
-        } else {
-          return new DataContent(params[0]);
         }
+        return new DataContent(params[0] || 'dashboard');
       }
     }
   }
 
   constructor(readonly type: string) {
+  }
+
+  getAllowedActions(): Array<Action> {
+    return DataContent.ACTIONS;
   }
 
   getKey(): string {
@@ -98,8 +114,20 @@ export class DataContent {
 }
 
 export class ModelContent extends DataContent {
-  protected constructor(type: string, protected model: string, public action: string) {
+
+  public action: Action;
+
+  protected constructor(type: string, protected model: string, actionKey: string) {
     super(type);
+    this.setAction(actionKey || '');
+  }
+
+  setAction(key: string) {
+    this.action = this.getAllowedActions().find((a: Action) => a.key === key);
+  }
+
+  getActionIndex(): number {
+    return this.getAllowedActions().indexOf(this.action);
   }
 
   getKey(): string {
@@ -117,26 +145,41 @@ export class ModelContent extends DataContent {
 
 export class IndexContent extends ModelContent {
 
-  static ACTIONS = ['new'];
+  static ACTIONS: Array<Action> = [
+    new Action('', 'List', 'list'),
+    new Action('new', 'New', 'add')
+  ];
 
-  constructor(model: string, action: string) {
-    super('index', model, action);
+  constructor(model: string, actionKey: string) {
+    super('index', model, actionKey);
+  }
+
+  getAllowedActions(): Array<Action> {
+    return IndexContent.ACTIONS;
   }
 
   getPath(): string[] {
-    if (this.action.length === 0) {
+    if (this.action.key.length === 0) {
       return [this.model];
     }
-    return [this.model, this.action];
+    return [this.model, this.action.key];
   }
 }
 
 export class ItemContent extends ModelContent {
 
-  static ACTIONS = ['edit'];
+  static ACTIONS: Array<Action> = [
+    new Action('', 'Info', 'info'),
+    new Action('edit', 'Edit', 'edit'),
+    new Action('delete', 'Delete', 'delete')
+  ];
 
   constructor(model: string, private id: any, action: string) {
     super('item', model, action);
+  }
+
+  getAllowedActions(): Array<Action> {
+    return ItemContent.ACTIONS;
   }
 
   getKey(): string {
@@ -144,10 +187,10 @@ export class ItemContent extends ModelContent {
   }
 
   getPath(): string[] {
-    if (this.action.length === 0) {
+    if (this.action.key.length === 0) {
       return [this.model, this.id];
     }
-    return [this.model, this.id, this.action];
+    return [this.model, this.id, this.action.key];
   }
 
   getApiParams(): string[] {
