@@ -31,7 +31,7 @@ export class DataTypeService {
   find(criteria: Object): Promise<DataType> {
     return new Promise<DataType>(
       (resolve, reject) => {
-        this.apiService.get(['setup', 'data_type'], {query: criteria, template: {viewport: '_id'}})
+        this.apiService.get(['setup', 'data_type'], {query: criteria, template: {viewport: '{_id}'}})
           .subscribe(
             response => {
               const item = response['items'][0];
@@ -58,6 +58,13 @@ export class Property {
   ) {
   }
 
+  getSchema(): Promise<Object> {
+    if (this.schema) {
+      return new Promise<Object>((resolve) => resolve(this.schema));
+    }
+    return this.dataType.getSchema();
+  }
+
   isVisible(): Promise<boolean> {
     return new Promise<boolean>(
       (resolve, reject) => {
@@ -73,19 +80,40 @@ export class Property {
     );
   }
 
-  getSchema(): Promise<Object> {
-    if (this.schema) {
-      return new Promise<Object>((resolve) => resolve(this.schema));
-    }
-    return this.dataType.getSchema();
-  }
-
   isSimple(): Promise<boolean> {
     return new Promise<boolean>(
       (resolve, reject) => {
         this.getSchema()
           .then(
             schema => resolve(['number', 'string', 'boolean'].indexOf(schema['type']) !== -1)
+          )
+          .catch(error => reject(error));
+      }
+    );
+  }
+
+  isReferenced(): Promise<boolean> {
+    return new Promise<boolean>(
+      (resolve, reject) => {
+        if (this.schema) {
+          resolve(false);
+        } else {
+          this.getSchema()
+            .then(
+              schema => resolve(schema['referenced'])
+            )
+            .catch(error => reject(error));
+        }
+      }
+    );
+  }
+
+  isMany(): Promise<boolean> {
+    return new Promise<boolean>(
+      (resolve, reject) => {
+        this.getSchema()
+          .then(
+            schema => resolve(schema['type'] === 'array')
           )
           .catch(error => reject(error));
       }
@@ -258,11 +286,11 @@ export class DataType {
     let nakedSchema = null;
     if (this.schema) {
       nakedSchema = {};
-      for (const key in schema) {
-        if (DECORATOR_PROPS.indexOf(key) > -1) {
+      Object.keys(schema).forEach(key => {
+        if (DECORATOR_PROPS.indexOf(key) === -1) {
           nakedSchema[key] = schema[key];
         }
-      }
+      });
     }
     return nakedSchema;
   }
@@ -285,5 +313,7 @@ const DECORATOR_PROPS = [
   'readOnly',
   'default',
   'visible',
-  'referenced_by'
+  'referenced_by',
+  'export_embedded',
+  'exclusive'
 ];
