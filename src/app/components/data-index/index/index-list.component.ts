@@ -11,7 +11,7 @@ import {IndexContent} from '../../../containers/data-container/data-container.co
   templateUrl: './index-list.component.html',
   styleUrls: ['./index-list.component.css']
 })
-export class IndexListComponent  implements OnInit {
+export class IndexListComponent implements OnInit {
 
   @ViewChild('lazy_loader') lazyLoader: LazyLoaderComponent;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -23,7 +23,7 @@ export class IndexListComponent  implements OnInit {
   items = [];
   count = 0;
   pageSize = 25;
-  properties: Property[];
+  indexProperties: Property[];
 
   displayedColumns: string[];
 
@@ -36,7 +36,7 @@ export class IndexListComponent  implements OnInit {
   }
 
   requestData(reload?: boolean) {
-    this.data = this.dataType = null;
+    this.data = null;
     const page = this.paginator ? this.paginator.pageIndex + 1 : 1;
     this.lazyLoader.loader = new Observable<String>(subscriber => {
       const handleError = (error) => {
@@ -48,20 +48,20 @@ export class IndexListComponent  implements OnInit {
           this.data = response;
           this.items = response['items'];
           this.count = response['count'];
-          subscriber.next('Resolving data type...');
-          this.dataTypeService.getById(this.data['data_type']['_id'])
-            .then(
-              (dataType: DataType) => {
-                this.dataType = dataType;
-                subscriber.next('Loading properties...');
-                dataType.getProps().then(
-                  (props: Property[]) => {
-                    this.properties = props;
-                    this.displayedColumns = props.map(p => p.name);
-                    subscriber.complete();
-                  }
-                ).catch(handleError);
-              }).catch(handleError);
+          if (this.dataType) {
+            subscriber.complete();
+          } else {
+            subscriber.next('Resolving data type...');
+            this.dataTypeService.getById(this.data['data_type']['_id'])
+              .then(
+                (dataType: DataType) => {
+                  this.dataType = dataType;
+                  subscriber.next('Loading properties...');
+                  this.captureIndexProperties()
+                    .then(() => subscriber.complete())
+                    .catch(handleError);
+                }).catch(handleError);
+          }
         },
         handleError
       );
@@ -69,5 +69,48 @@ export class IndexListComponent  implements OnInit {
     if (reload) {
       this.lazyLoader.reload();
     }
+  }
+
+  private captureIndexProperties(): Promise<void> {
+    return new Promise<void>(
+      (resolve, reject) => {
+        const handleError = error => reject(error);
+        if (this.dataType) {
+          this.dataType.getProps().then(
+            (props: Property[]) => {
+              Promise.all(
+                props.map(p => new Promise<Property>(
+                  (res, rej) => {
+                    p.isVisible().then(
+                      visible => {
+                        if (visible) {
+                          p.isSimple().then(
+                            simple => {
+                              if (simple) {
+                                res(p);
+                              } else {
+                                res(null);
+                              }
+                            }).catch(e => rej(e));
+                        } else {
+                          res(null);
+                        }
+                      }).catch(e => rej(e));
+                  }
+                ))
+              ).then(
+                (indexProps: Array<Property>) => {
+                  this.indexProperties = indexProps.filter(p => p).slice(0, 5);
+                  this.displayedColumns = this.indexProperties.map(p => p.name);
+                  resolve();
+                }
+              ).catch(handleError);
+            }
+          ).catch(handleError);
+        } else {
+          reject('No data type');
+        }
+      }
+    );
   }
 }

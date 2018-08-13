@@ -57,6 +57,40 @@ export class Property {
     readonly required?: boolean
   ) {
   }
+
+  isVisible(): Promise<boolean> {
+    return new Promise<boolean>(
+      (resolve, reject) => {
+        this.getSchema()
+          .then(
+            schema => resolve(
+              (!schema.hasOwnProperty('visible') || schema['visible']) &&
+              (!schema.hasOwnProperty('edi') || (schema['edi'].constructor === Object && !schema['edi']['discard']))
+            )
+          )
+          .catch(error => reject(error));
+      }
+    );
+  }
+
+  getSchema(): Promise<Object> {
+    if (this.schema) {
+      return new Promise<Object>((resolve) => resolve(this.schema));
+    }
+    return this.dataType.getSchema();
+  }
+
+  isSimple(): Promise<boolean> {
+    return new Promise<boolean>(
+      (resolve, reject) => {
+        this.getSchema()
+          .then(
+            schema => resolve(['number', 'string', 'boolean'].indexOf(schema['type']) !== -1)
+          )
+          .catch(error => reject(error));
+      }
+    );
+  }
 }
 
 export class DataType {
