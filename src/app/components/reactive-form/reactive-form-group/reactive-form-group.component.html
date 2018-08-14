@@ -1,0 +1,25 @@
+<div [formGroup]="componentFormGroup" class="form-group">
+  <h3>{{name}}</h3>
+  <fieldset *ngFor="let property of properties">
+    <div [ngSwitch]="property.schema['type']">
+
+      <cenit-reactive-field
+        [name]="property.name"
+        [fieldFormControl]="property.control"
+        [fieldSchema]="property.schema"
+        *ngSwitchDefault></cenit-reactive-field>
+
+      <cenit-reactive-form-group
+        [name]="property.name"
+        [groupSchema]="property.schema"
+        [componentFormGroup]="property.control"
+        *ngSwitchCase="'object'"></cenit-reactive-form-group>
+
+      <cenit-reactive-form-array
+        [name]="property.name"
+        [arraySchema]="property.schema"
+        [componentFormArray]="property.control"
+        *ngSwitchCase="'array'"></cenit-reactive-form-array>
+    </div>
+  </fieldset>
+</div>

@@ -13,7 +13,10 @@ import {
   MatToolbarModule,
   MatTabsModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatGridListModule,
+  MatFormFieldModule,
+  MatInputModule
 } from '@angular/material';
 
 import {CenitComponent} from './cenit.component';
@@ -29,7 +32,7 @@ import {UserLinkComponent} from './navigation/toolbar/user-link/user-link.compon
 import {TenantSelectorComponent} from './navigation/toolbar/tenant-selector/tenant-selector.component';
 import {LazyLoaderComponent} from './components/lazy-loader/lazy-loader.component';
 import {ApiService} from './services/api.service';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DataContainerComponent} from './containers/data-container/data-container.component';
 import {DataDashboardComponent} from './components/data-dashboard/data-dashboard.component';
 import {DataIndexComponent} from './components/data-index/data-index.component';
@@ -37,6 +40,14 @@ import {DataTypeService} from './services/data-type.service';
 import {DataItemComponent} from './components/data-item/data-item.component';
 import {IndexListComponent} from './components/data-index/index/index-list.component';
 import {IndexCreateComponent} from './components/data-index/create/index-create.component';
+import {ReactiveFormComponent} from './components/reactive-form/reactive-form.component';
+import {ReactiveFormGroupComponent} from './components/reactive-form/reactive-form-group/reactive-form-group.component';
+import {ReactiveFormArrayComponent} from './components/reactive-form/reactive-form-array/reactive-form-array.component';
+import {ReactiveFieldComponent} from './components/reactive-form/reactive-field/reactive-field.component';
+import {ReactiveArrayItemComponent} from './components/reactive-form/reactive-form-array/reactive-array-item/reactive-array-item.component';
+import {InputControlComponent} from './components/reactive-form/reactive-field/input-control/input-control.component';
+import {EnumControlComponent} from './components/reactive-form/reactive-field/enum-control/enum-control.component';
+import {BooleanControlComponent} from './components/reactive-form/reactive-field/boolean-control/boolean-control.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -62,11 +73,20 @@ const appRoutes: Routes = [
     DataIndexComponent,
     IndexListComponent,
     IndexCreateComponent,
-    DataItemComponent
+    DataItemComponent,
+    ReactiveFormComponent,
+    ReactiveFormGroupComponent,
+    ReactiveFormArrayComponent,
+    ReactiveFieldComponent,
+    ReactiveArrayItemComponent,
+    InputControlComponent,
+    EnumControlComponent,
+    BooleanControlComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
@@ -82,7 +102,10 @@ const appRoutes: Routes = [
     MatProgressBarModule,
     MatTabsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatGridListModule
   ],
   providers: [
     AuthService,

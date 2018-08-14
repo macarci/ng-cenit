@@ -52,15 +52,14 @@ export class IndexListComponent implements OnInit {
             subscriber.complete();
           } else {
             subscriber.next('Resolving data type...');
-            this.dataTypeService.getById(this.data['data_type']['_id'])
-              .then(
-                (dataType: DataType) => {
-                  this.dataType = dataType;
-                  subscriber.next('Loading properties...');
-                  this.captureIndexProperties()
-                    .then(() => subscriber.complete())
-                    .catch(handleError);
-                }).catch(handleError);
+            this.indexContent.getDataType()
+              .then((dataType: DataType) => {
+                this.dataType = dataType;
+                subscriber.next('Loading properties...');
+                this.captureIndexProperties()
+                  .then(() => subscriber.complete())
+                  .catch(handleError);
+              }).catch(handleError);
           }
         },
         handleError
@@ -100,7 +99,7 @@ export class IndexListComponent implements OnInit {
                 ))
               ).then(
                 (indexProps: Array<Property>) => {
-                  this.indexProperties = indexProps.filter(p => p).slice(0, 5);
+                  this.indexProperties = indexProps.filter(p => p);
                   this.displayedColumns = this.indexProperties.map(p => p.name);
                   resolve();
                 }

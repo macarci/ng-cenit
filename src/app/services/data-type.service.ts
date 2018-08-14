@@ -4,7 +4,7 @@ import {ApiService} from './api.service';
 @Injectable()
 export class DataTypeService {
 
-  constructor(private apiService: ApiService) {
+  constructor(readonly apiService: ApiService) {
   }
 
   getById(id: string): Promise<DataType> {

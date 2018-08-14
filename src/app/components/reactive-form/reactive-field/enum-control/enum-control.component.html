@@ -1,0 +1,7 @@
+
+<select [name]="name" [formControl]="fieldControl">
+  <option *ngFor="let option of options"
+    [value]="option[0]">
+    {{option[1]}}
+  </option>
+</select>

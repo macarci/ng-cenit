@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
+import {DataType, DataTypeService} from '../../services/data-type.service';
 
 @Component({
   selector: 'cenit-container-data',
@@ -17,7 +18,8 @@ export class DataContainerComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location) {
+    private location: Location,
+    private dataTypeService: DataTypeService) {
   }
 
   ngOnInit() {
@@ -33,6 +35,7 @@ export class DataContainerComponent implements OnInit {
       return c.getKey() === this.currentKey;
     });
     if (index === -1) {
+      content.dataTypeService = this.dataTypeService;
       this.contents.push(content);
       index = this.contents.length - 1;
     }
@@ -73,6 +76,8 @@ export class DataContent {
   static ACTIONS: Array<Action> = [
     new Action('dashboard', 'Dashboard', 'dashboard')
   ];
+
+  public dataTypeService: DataTypeService;
 
   static from(url: string): DataContent {
     const params = url.split('/');
@@ -117,6 +122,9 @@ export class ModelContent extends DataContent {
 
   public action: Action;
 
+  dataTypeId: string;
+  dataTypePromise: Promise<DataType>;
+
   protected constructor(type: string, protected model: string, actionKey: string) {
     super(type);
     this.setAction(actionKey || '');
@@ -140,6 +148,31 @@ export class ModelContent extends DataContent {
       return ['setup', params[0]];
     }
     return [params.shift(), params.join('~')];
+  }
+
+  async getDataType(): Promise<DataType> {
+    if (!this.dataTypePromise) {
+      if (this.dataTypeId) {
+        this.dataTypePromise = this.dataTypeService.getById(this.dataTypeId);
+      } else {
+        this.dataTypePromise = new Promise<DataType>(
+          (resolve, reject) => {
+            const handleError = error => reject(error);
+            this.dataTypeService.apiService.get(this.getApiParams(), {query: {limit: 0}})
+              .subscribe(
+                response => {
+                  this.dataTypeId = response['data_type']['_id'];
+                  this.dataTypeService.getById(this.dataTypeId)
+                    .then((dataType: DataType) => resolve(dataType))
+                    .catch(handleError);
+                },
+                handleError
+              );
+          }
+        );
+      }
+    }
+    return await this.dataTypePromise;
   }
 }
 
