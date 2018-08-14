@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
+import {Property} from '../../../services/data-type.service';
+import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
 
 @Component({
   selector: 'cenit-reactive-form-group',
@@ -8,46 +10,59 @@ import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@a
 })
 export class ReactiveFormGroupComponent implements OnInit {
 
+  @Input() property: Property;
   @Input() name: string;
-  @Input() groupSchema: Object;
   @Input() componentFormGroup: FormGroup;
 
-  properties: Array<any>;
+  @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
+  propControls: Array<{ prop: Property; control: AbstractControl; type: string }>;
 
   constructor() {
   }
 
   ngOnInit() {
-    const required = this.groupSchema['required'] || [];
-    this.properties = Object.keys(this.groupSchema['properties']).map(property => {
-      const propertySchema = this.groupSchema['properties'][property];
-      let validators;
-      if (required.indexOf(property) > -1 || propertySchema['required']) {
-        validators = Validators.required;
-      }
-      const control = this.controlFor(propertySchema, validators);
-      if (required.indexOf(property) > -1 || propertySchema['required']) {
-        control.setValidators(Validators.required);
-      }
-      this.componentFormGroup.addControl(property, control);
-      return {
-        name: property,
-        schema: propertySchema,
-        control: control
-      };
-    });
-
-    console.log(this.name, 'R-GROUP INITIALIZED', this.properties);
-  }
-
-  controlFor(schema, validators): AbstractControl {
-    switch (schema['type']) {
-      case 'object':
-        return new FormGroup({}, validators);
-      case 'array':
-        return new FormArray([], validators);
-      default:
-        return new FormControl(schema['default'], validators);
-    }
+    this.name = this.name || this.property.name;
+    this.property.dataType.getProps()
+      .then((props: Array<Property>) => {
+        const types: string[] = [];
+        Promise.all(
+          props.map(
+            prop => new Promise<AbstractControl>(
+              (resolve, reject) => {
+                prop.getSchema()
+                  .then(
+                    schema => {
+                      types.push(schema['type']);
+                      switch (schema['type']) {
+                        case 'object':
+                          resolve(new FormGroup({}));
+                          break;
+                        case 'array':
+                          resolve(new FormArray([]));
+                          break;
+                        default:
+                          resolve(new FormControl(schema['default']));
+                      }
+                    })
+                  .catch(error => reject(error));
+              }
+            )
+          )
+        ).then((controls: AbstractControl[]) => {
+          this.propControls = controls.map<{ prop: Property; control: AbstractControl; type: string }>(
+            (control: AbstractControl, index: number) => {
+              this.componentFormGroup.addControl(props[index].name, control);
+              return {
+                prop: props[index],
+                control: control,
+                type: types[index]
+              };
+            }
+          );
+          this.lazyLoader.complete();
+        })
+          .catch(error => this.lazyLoader.error(error));
+      })
+      .catch(error => this.lazyLoader.error(error));
   }
 }

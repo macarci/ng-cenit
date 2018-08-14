@@ -1,22 +1,24 @@
-<div>
-  <label>{{label}}</label>
-  <div [ngSwitch]="controlType">
+<cenit-lazy-loader>
+  <div>
+    <label>{{label}}</label>
+    <div [ngSwitch]="controlType">
 
-    <cenit-enum-control
-      [name]="name"
-      [fieldControl]="fieldFormControl"
-      [fieldSchema]="fieldSchema"
-      *ngSwitchCase="'enum'"></cenit-enum-control>
+      <cenit-enum-control
+        [name]="name"
+        [fieldControl]="fieldFormControl"
+        [fieldSchema]="fieldSchema"
+        *ngSwitchCase="'enum'"></cenit-enum-control>
 
-    <cenit-boolean-control
-      [name]="name"
-      [fieldControl]="fieldFormControl"
-      *ngSwitchCase="'boolean'"></cenit-boolean-control>
+      <cenit-boolean-control
+        [name]="name"
+        [fieldControl]="fieldFormControl"
+        *ngSwitchCase="'boolean'"></cenit-boolean-control>
 
-    <cenit-input-control
-      [name]="name"
-      [fieldControl]="fieldFormControl"
-      *ngSwitchCase="'string'"></cenit-input-control>
+      <cenit-input-control
+        [name]="name"
+        [fieldControl]="fieldFormControl"
+        *ngSwitchCase="'string'"></cenit-input-control>
+    </div>
+    <span>{{description}}</span>
   </div>
-  <span>{{description}}</span>
-</div>
+</cenit-lazy-loader>

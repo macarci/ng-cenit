@@ -38,7 +38,7 @@ import {DataDashboardComponent} from './components/data-dashboard/data-dashboard
 import {DataIndexComponent} from './components/data-index/data-index.component';
 import {DataTypeService} from './services/data-type.service';
 import {DataItemComponent} from './components/data-item/data-item.component';
-import {IndexListComponent} from './components/data-index/index/index-list.component';
+import {IndexListComponent} from './components/data-index/list/index-list.component';
 import {IndexCreateComponent} from './components/data-index/create/index-create.component';
 import {ReactiveFormComponent} from './components/reactive-form/reactive-form.component';
 import {ReactiveFormGroupComponent} from './components/reactive-form/reactive-form-group/reactive-form-group.component';

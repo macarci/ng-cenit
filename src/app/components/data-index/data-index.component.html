@@ -17,7 +17,6 @@
       </mat-list-item>
     </mat-list>
   </mat-sidenav>
-  <!--<mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="setSelectedIndex($event)">-->
   <div class="header-less-tabs">
     <mat-tab-group [selectedIndex]="currentIndex">
       <mat-tab *ngFor="let action of actions">
@@ -27,7 +26,7 @@
         </ng-template>
         <div [ngSwitch]="action.key">
           <cenit-data-index-list [indexContent]="indexContent" *ngSwitchCase="''"></cenit-data-index-list>
-          <cenit-data-index-create *ngSwitchCase="'new'"></cenit-data-index-create>
+          <cenit-data-index-create [indexContent]="indexContent" *ngSwitchCase="'new'"></cenit-data-index-create>
         </div>
       </mat-tab>
     </mat-tab-group>

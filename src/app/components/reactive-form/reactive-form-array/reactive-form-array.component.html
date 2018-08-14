@@ -1,28 +1,27 @@
-<div [formGroup]="componentFormArray" class="form-group">
-  <h3>{{name}}</h3>
-  <button class="btn-primary" (click)="addNewItem()">Add new</button>
-  <div *ngFor="let control of componentFormArray.controls; let idx = index">
-    <cenit-reactive-array-item (delete)="handleItemDeleted($event)">
-      <div [ngSwitch]="itemsSchema['type']">
+<cenit-lazy-loader>
+  <div [formGroup]="componentFormArray" class="form-group">
+    <h3>{{name}}</h3>
+    <button class="btn-primary" (click)="addNewItem()">Add new</button>
+    <div *ngFor="let itemControl of itemControls; let idx = index">
+      <cenit-reactive-array-item (delete)="handleItemDeleted($event)">
+        <div [ngSwitch]="itemsSchema['type']">
 
-        <cenit-reactive-field
-          [name]="idx"
-          [fieldFormControl]="control"
-          [fieldSchema]="itemsSchema"
-          *ngSwitchDefault></cenit-reactive-field>
+          <cenit-reactive-field
+            [fieldFormControl]="itemControl.control"
+            [property]="itemControl.prop"
+            *ngSwitchDefault></cenit-reactive-field>
 
-        <cenit-reactive-form-group
-          [name]="idx"
-          [groupSchema]="itemsSchema"
-          [componentFormGroup]="control"
-          *ngSwitchCase="'object'"></cenit-reactive-form-group>
+          <cenit-reactive-form-group
+            [property]="itemControl.prop"
+            [componentFormGroup]="itemControl.control"
+            *ngSwitchCase="'object'"></cenit-reactive-form-group>
 
-        <cenit-reactive-form-array
-          [name]="idx"
-          [arraySchema]="itemsSchema"
-          [componentFormArray]="control"
-          *ngSwitchCase="'array'"></cenit-reactive-form-array>
-      </div>
-    </cenit-reactive-array-item>
+          <cenit-reactive-form-array
+            [property]="itemControl.prop"
+            [componentFormArray]="itemControl.control"
+            *ngSwitchCase="'array'"></cenit-reactive-form-array>
+        </div>
+      </cenit-reactive-array-item>
+    </div>
   </div>
-</div>
+</cenit-lazy-loader>
