@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  //cenitHost: 'https://cenit.io',
-  cenitHost: 'http://localhost:3000',
+  cenitHost: 'https://cenit.io',
   localHost: 'http://localhost:4200'
 };
 

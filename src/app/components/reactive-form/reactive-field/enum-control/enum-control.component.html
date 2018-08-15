@@ -1,7 +1,10 @@
-
-<select [name]="name" [formControl]="fieldControl">
-  <option *ngFor="let option of options"
-    [value]="option[0]">
-    {{option[1]}}
-  </option>
-</select>
+<cenit-lazy-loader>
+  <mat-form-field>
+    <mat-select [placeholder]="label | async" [formControl]="fieldControl">
+      <mat-option *ngFor="let value of enumValues; let index = index" [value]="value">
+        {{enumValues[index]}}
+      </mat-option>
+    </mat-select>
+    <mat-hint>{{description | async}}</mat-hint>
+  </mat-form-field>
+</cenit-lazy-loader>

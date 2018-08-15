@@ -1,6 +1,6 @@
 <cenit-lazy-loader>
   <div [formGroup]="componentFormGroup" class="form-group">
-    <h3>{{name}}</h3>
+    <h3>{{title | async }}</h3>
     <fieldset *ngFor="let propControl of propControls">
       <div [ngSwitch]="propControl.type">
 

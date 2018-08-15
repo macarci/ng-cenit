@@ -1,4 +1,5 @@
 <mat-form-field>
-  <input matInput type="text" [name]="name" [formControl]="fieldControl" [placeholder]="name">
+  <input matInput type="text" [name]="name" [formControl]="fieldControl" [placeholder]="label | async">
+  <mat-hint>{{description | async}}</mat-hint>
 </mat-form-field>
 

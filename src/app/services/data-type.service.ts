@@ -119,6 +119,25 @@ export class Property {
       }
     );
   }
+
+  getTitle(): Promise<string> {
+    return new Promise<string>(
+      (resolve, reject) => {
+        this.getSchema()
+          .then(
+            schema => {
+              let title;
+              if (title = schema['title']) {
+                resolve(title.toString());
+              } else {
+                resolve(this.name.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()));
+              }
+            }
+          )
+          .catch(e => reject(e));
+      }
+    );
+  }
 }
 
 export class DataType {
@@ -194,6 +213,29 @@ export class DataType {
     return await this.propsPromise;
   }
 
+  visibleProps(): Promise<Property[]> {
+    return new Promise<Property[]>(
+      (resolve, reject) => {
+        this.getProps()
+          .then(
+            (props: Property[]) => {
+              Promise.all(props.map(prop => prop.isVisible()))
+                .then(
+                  (visibles: boolean[]) => {
+                    resolve(
+                      visibles.map((v: boolean, index: number) => v ? props[index] : null)
+                        .filter(p => p)
+                    );
+                  }
+                )
+                .catch(error => reject(error));
+            }
+          )
+          .catch(error => reject(error));
+      }
+    );
+  }
+
   async mergeSchema(schema: Object): Promise<Object> {
     return new Promise<Object>(
       (resolve, reject) => {
@@ -205,6 +247,39 @@ export class DataType {
         } else {
           resolve(schema);
         }
+      }
+    );
+  }
+
+  getTitle(): Promise<string> {
+    return new Promise<string>(
+      (resolve, reject) => {
+        this.getSchema()
+          .then(
+            schema => {
+              let title;
+              if (title = schema['title']) {
+                resolve(title.toString());
+              } else {
+                resolve(this.name.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()));
+              }
+            }
+          )
+          .catch(e => reject(e));
+      }
+    );
+  }
+
+  getSchemaEntry<T>(key: string): Promise<T> {
+    return new Promise<T>(
+      (resolve, reject) => {
+        this.getSchema()
+          .then(
+            schema => {
+              resolve(schema[key]);
+            }
+          )
+          .catch(e => reject(e));
       }
     );
   }

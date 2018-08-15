@@ -16,7 +16,9 @@ import {
   MatPaginatorModule,
   MatGridListModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatCheckboxModule,
+  MatSelectModule
 } from '@angular/material';
 
 import {CenitComponent} from './cenit.component';
@@ -105,6 +107,8 @@ const appRoutes: Routes = [
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCheckboxModule,
+    MatSelectModule,
     MatGridListModule
   ],
   providers: [

@@ -12,6 +12,7 @@ export class ReactiveFormComponent implements OnInit {
 
   @Input() dataTypePromise: Promise<DataType>;
 
+  title: Promise<string> | string;
   property: Property;
   formGroup: FormGroup;
   dataGroup: FormGroup;
@@ -26,6 +27,7 @@ export class ReactiveFormComponent implements OnInit {
     this.formGroup = new FormGroup({data: this.dataGroup});
     this.dataTypePromise.then(
       (dataType: DataType) => {
+        this.title = dataType.getTitle();
         this.property = new Property('data', dataType);
         this.lazyLoader.complete();
       }

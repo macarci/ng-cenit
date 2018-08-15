@@ -10,32 +10,21 @@ import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
 })
 export class ReactiveFieldComponent implements OnInit {
 
-  @Input() property: Property;
-  @Input() name: string;
   @Input() fieldFormControl: FormControl;
-  @Input() required: boolean;
-
-  label: string;
-  description: string;
-  controlType: string;
+  @Input() property: Property;
 
   @ViewChild(LazyLoaderComponent) lazyLoader;
-  fieldSchema: Object;
+  controlType: string;
 
   ngOnInit() {
-    this.name = this.name || this.property.name;
     this.property.getSchema()
       .then(
         schema => {
-          this.fieldSchema = schema;
-          this.label = schema['title'] || this.name;
-          this.description = schema['description'];
           this.controlType = this.controlTypeFor(schema);
           this.lazyLoader.complete();
+          console.log(this.property.name, 'CONTROL INITIALIZED');
         })
       .catch(error => this.lazyLoader.error(error));
-
-    console.log(this.name, 'CONTROL INITIALIZED');
   }
 
   controlTypeFor(schema) {
@@ -52,5 +41,24 @@ export class ReactiveFieldComponent implements OnInit {
       default:
         return schema['type'];
     }
+  }
+}
+
+@Component({})
+export class BaseFieldControlComponent implements OnInit {
+
+  @Input() property: Property;
+  @Input() fieldControl: FormControl;
+
+  @ViewChild(LazyLoaderComponent) lazyLoader;
+
+  protected name: string;
+  protected label: Promise<string> | string;
+  protected description: Promise<string> | string;
+
+  ngOnInit() {
+    this.name = this.property.name;
+    this.label = this.property.getTitle();
+    this.description = this.property.dataType.getSchemaEntry<string>('description');
   }
 }

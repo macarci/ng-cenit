@@ -1,2 +1,6 @@
-
-<input type="checkbox" [name]="name" [formControl]="fieldControl">
+  <mat-checkbox
+    [name]="name"
+    labelPosition="before"
+    [formControl]="fieldControl">
+    {{label | async}}
+  </mat-checkbox>

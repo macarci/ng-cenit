@@ -1,24 +1,30 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
+import {BaseFieldControlComponent} from '../reactive-field.component';
+import {LazyLoaderComponent} from '../../../lazy-loader/lazy-loader.component';
 
 @Component({
   selector: 'cenit-enum-control',
   templateUrl: './enum-control.component.html',
   styleUrls: ['./enum-control.component.css']
 })
-export class EnumControlComponent implements OnInit {
+export class EnumControlComponent extends BaseFieldControlComponent {
 
-  @Input() name: string;
-  @Input() fieldControl: FormControl;
-  @Input() fieldSchema: Object;
+  @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
 
-  options: string[][] = [];
+  enumValues: string[];
+  enumLabels: string[];
 
   ngOnInit() {
-    const enumValues = this.fieldSchema['enum'];
-    const enumLabels = this.fieldSchema['enumNames'] || enumValues;
-    for (let i = 0; i < enumValues.length; i++){
-      this.options.push([enumValues[i], enumLabels[i] || enumValues[i]]);
-    }
+    super.ngOnInit();
+    this.property.getSchema()
+      .then(
+        schema => {
+          this.enumValues = schema['enum'];
+          this.enumLabels = schema['enumNames'] || this.enumValues;
+          this.lazyLoader.complete();
+        }
+      )
+      .catch(error => this.lazyLoader.error(error));
   }
 }
