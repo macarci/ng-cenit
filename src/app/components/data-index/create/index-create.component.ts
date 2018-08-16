@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {IndexContent} from '../../../containers/data-container/data-container.component';
 import {DataType} from '../../../services/data-type.service';
+import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
 
 @Component({
   selector: 'cenit-data-index-create',
@@ -11,9 +12,17 @@ export class IndexCreateComponent implements OnInit {
 
   @Input() indexContent: IndexContent;
 
-  dataTypePromise: Promise<DataType>;
+  @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
+  dataType: DataType;
 
   ngOnInit() {
-    this.dataTypePromise = this.indexContent.getDataType();
+    this.indexContent.getDataType()
+      .then(
+        (dataType: DataType) => {
+          this.dataType = dataType;
+          this.lazyLoader.complete();
+        }
+      )
+      .catch(error => this.lazyLoader.error(error));
   }
 }

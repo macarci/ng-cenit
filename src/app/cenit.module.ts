@@ -50,6 +50,7 @@ import {ReactiveArrayItemComponent} from './components/reactive-form/reactive-fo
 import {InputControlComponent} from './components/reactive-form/reactive-field/input-control/input-control.component';
 import {EnumControlComponent} from './components/reactive-form/reactive-field/enum-control/enum-control.component';
 import {BooleanControlComponent} from './components/reactive-form/reactive-field/boolean-control/boolean-control.component';
+import {FileUploadFormComponent} from './components/file-upload-form/file-upload-form.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -83,7 +84,8 @@ const appRoutes: Routes = [
     ReactiveArrayItemComponent,
     InputControlComponent,
     EnumControlComponent,
-    BooleanControlComponent
+    BooleanControlComponent,
+    FileUploadFormComponent
   ],
   imports: [
     BrowserModule,

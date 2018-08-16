@@ -1,2 +1,10 @@
-<cenit-reactive-form [dataTypePromise]="dataTypePromise"></cenit-reactive-form>
+<cenit-lazy-loader>
+  <div [ngSwitch]="dataType.type" *ngIf="dataType">
+    <cenit-file-upload-form
+      [dataType]="dataType"
+      [indexContent]="indexContent"
+      *ngSwitchCase="'Setup::FileDataType'"></cenit-file-upload-form>
+    <cenit-reactive-form [dataType]="dataType" *ngSwitchDefault></cenit-reactive-form>
+  </div>
+</cenit-lazy-loader>
 

@@ -10,11 +10,12 @@ export class DataTypeService {
   getById(id: string): Promise<DataType> {
     return new Promise<DataType>(
       (resolve, reject) => {
-        this.apiService.get(['setup', 'data_type', id], {template: {viewport: '{_id namespace name title}'}})
+        this.apiService.get(['setup', 'data_type', id], {template: {viewport: '{_id namespace name title _type}'}})
           .subscribe(
             (response) => {
               const dataType = new DataType(
                 response['_id'],
+                response['_type'],
                 response['namespace'],
                 response['name'],
                 response['title']
@@ -142,15 +143,18 @@ export class Property {
 
 export class DataType {
 
+  readonly FILE = 'Setup::FileDataType';
+
   properties: Property[];
   propsPromise: Promise<Property[]>;
 
   schemaPromise: Promise<Object>;
 
   constructor(
-    private id: string,
-    private namespace: string,
-    private name: string,
+    readonly id: string,
+    readonly type: string,
+    readonly namespace: string,
+    readonly name: string,
     private title: string,
     private schema?: Object,
     public dataTypeService?: DataTypeService,
@@ -302,7 +306,7 @@ export class DataType {
             (ref && (size === 1 || (size === 2 && nakedSchema.hasOwnProperty('referenced')))) ||
             (nakedSchema['type'] === 'array' && (items = this.strip(nakedSchema['items'])) &&
               (size === 2 || (size === 3 && nakedSchema.hasOwnProperty('referenced'))) &&
-              Object.keys(items).length === 1 && ((ref = items['$ref']) && ref.constructor === String || ref.constructor === Object))
+              Object.keys(items).length === 1 && (ref = items['$ref']) && (ref.constructor === String || ref.constructor === Object))
           ) {
             if (ref.constructor === Object) {
               resolveDataType = this.dataTypeService.find(ref);
@@ -335,6 +339,7 @@ export class DataType {
                     }
                     resolve(new DataType(
                       null,
+                      'Setup::JsonDataType',
                       null,
                       this.name + '::' + name,
                       null,

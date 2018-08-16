@@ -10,14 +10,12 @@ import {LazyLoaderComponent} from '../lazy-loader/lazy-loader.component';
 })
 export class ReactiveFormComponent implements OnInit {
 
-  @Input() dataTypePromise: Promise<DataType>;
+  @Input() dataType: DataType;
 
   title: Promise<string> | string;
   property: Property;
   formGroup: FormGroup;
   dataGroup: FormGroup;
-
-  @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
 
   constructor() {
   }
@@ -25,13 +23,8 @@ export class ReactiveFormComponent implements OnInit {
   ngOnInit() {
     this.dataGroup = new FormGroup({});
     this.formGroup = new FormGroup({data: this.dataGroup});
-    this.dataTypePromise.then(
-      (dataType: DataType) => {
-        this.title = dataType.getTitle();
-        this.property = new Property('data', dataType);
-        this.lazyLoader.complete();
-      }
-    ).catch(error => this.lazyLoader.error(error));
+    this.title = this.dataType.getTitle();
+    this.property = new Property('data', this.dataType);
   }
 
   onSubmit() {
