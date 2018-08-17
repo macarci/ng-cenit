@@ -10,7 +10,7 @@ export class DataTypeService {
   getById(id: string): Promise<DataType> {
     return new Promise<DataType>(
       (resolve, reject) => {
-        this.apiService.get(['setup', 'data_type', id], {template: {viewport: '{_id namespace name title _type}'}})
+        this.apiService.get(['setup', 'data_type', id], {template: {viewport: '{_id namespace name title _type schema}'}})
           .subscribe(
             (response) => {
               const dataType = new DataType(
@@ -18,7 +18,8 @@ export class DataTypeService {
                 response['_type'],
                 response['namespace'],
                 response['name'],
-                response['title']
+                response['title'],
+                response['_type'] === JSON_TYPE ? null : response['schema']
               );
               dataType.dataTypeService = this;
               dataType.apiService = this.apiService;
@@ -141,9 +142,11 @@ export class Property {
   }
 }
 
-export class DataType {
+export const JSON_TYPE = 'Setup::JsonDataType';
+export const FILE_TYPE = 'Setup::FileDataType';
+export const CENIT_TYPE = 'Setup::CenitDataType';
 
-  readonly FILE = 'Setup::FileDataType';
+export class DataType {
 
   properties: Property[];
   propsPromise: Promise<Property[]>;
@@ -169,7 +172,7 @@ export class DataType {
           if (this.schema) {
             resolve(this.schema);
           } else {
-            this.apiService.digest(['setup', 'data_type', this.id]).subscribe(
+            this.apiService.get(['setup', 'data_type', this.id, 'digest']).subscribe(
               schema => {
                 this.schema = schema;
                 resolve(schema);

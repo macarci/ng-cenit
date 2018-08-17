@@ -8,8 +8,8 @@ import {AuthService} from './auth.service';
 export class ApiService {
 
   constructor(
-    private httpClient: HttpClient,
-    private authService: AuthService) {
+    readonly httpClient: HttpClient,
+    readonly authService: AuthService) {
   }
 
   get<T>(params: string[], options?: { headers?: Object; query?: Object; template?: Object }): Observable<T> {
