@@ -55,16 +55,30 @@ export class Property {
   constructor(
     readonly name: string,
     readonly dataType: DataType,
-    readonly schema?: Object,
+    readonly propertySchema?: Object,
     readonly required?: boolean
   ) {
   }
 
   getSchema(): Promise<Object> {
-    if (this.schema) {
-      return new Promise<Object>((resolve) => resolve(this.schema));
+    if (this.propertySchema) {
+      return Promise.resolve(this.propertySchema);
     }
     return this.dataType.getSchema();
+  }
+
+  getSchemaEntry<T>(key: string): Promise<T> {
+    return new Promise<T>(
+      (resolve, reject) => {
+        this.getSchema()
+          .then(
+            schema => {
+              resolve(schema[key]);
+            }
+          )
+          .catch(e => reject(e));
+      }
+    );
   }
 
   isVisible(): Promise<boolean> {
@@ -97,15 +111,11 @@ export class Property {
   isReferenced(): Promise<boolean> {
     return new Promise<boolean>(
       (resolve, reject) => {
-        if (this.schema) {
-          resolve(false);
-        } else {
-          this.getSchema()
-            .then(
-              schema => resolve(schema['referenced'])
-            )
-            .catch(error => reject(error));
-        }
+        this.getSchema()
+          .then(
+            schema => resolve(schema['referenced'])
+          )
+          .catch(error => reject(error));
       }
     );
   }
@@ -294,8 +304,8 @@ export class DataType {
   private propertyFrom(name: string, schema: Object): Promise<Property> {
     return new Promise<Property>(
       (propResolve, propReject) => {
-        // Checking referenced schema
         let ref, resolveDataType: Promise<DataType>;
+        // Checking referenced schema
         if (schema.constructor === Object && (
           ((ref = schema['$ref']) && ref.constructor !== Array) || schema['type'] === 'array')
         ) {
@@ -329,16 +339,18 @@ export class DataType {
             }
           }
         }
+        // Not referenced schema
         if (!resolveDataType) {
           resolveDataType = new Promise<DataType>(
             (resolve, reject) => {
               this.mergeSchema(schema)
                 .then(
                   mergedSchema => {
+                    let typeSchema: Object;
                     if (mergedSchema['type'] === 'array' && mergedSchema.hasOwnProperty('items')) {
-                      schema = mergedSchema['items'];
+                      typeSchema = mergedSchema['items'];
                     } else {
-                      schema = mergedSchema;
+                      typeSchema = mergedSchema;
                     }
                     resolve(new DataType(
                       null,
@@ -346,7 +358,7 @@ export class DataType {
                       null,
                       this.name + '::' + name,
                       null,
-                      schema,
+                      typeSchema,
                       this.dataTypeService,
                       this.apiService
                     ));

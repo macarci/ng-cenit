@@ -22,7 +22,6 @@ export class ReactiveFieldComponent implements OnInit {
         schema => {
           this.controlType = this.controlTypeFor(schema);
           this.lazyLoader.complete();
-          console.log(this.property.name, 'CONTROL INITIALIZED');
         })
       .catch(error => this.lazyLoader.error(error));
   }
@@ -59,6 +58,6 @@ export class BaseFieldControlComponent implements OnInit {
   ngOnInit() {
     this.name = this.property.name;
     this.label = this.property.getTitle();
-    this.description = this.property.dataType.getSchemaEntry<string>('description');
+    this.description = this.property.getSchemaEntry<string>('description');
   }
 }

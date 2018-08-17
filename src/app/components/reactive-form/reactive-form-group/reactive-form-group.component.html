@@ -18,6 +18,11 @@
           [property]="propControl.prop"
           [componentFormArray]="propControl.control"
           *ngSwitchCase="'array'"></cenit-reactive-form-array>
+
+        <cenit-reactive-form-ref-one
+          [property]="propControl.prop"
+          [refControl]="propControl.control"
+          *ngSwitchCase="'ref-one'"></cenit-reactive-form-ref-one>
       </div>
     </fieldset>
   </div>

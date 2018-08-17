@@ -6,7 +6,7 @@ import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
 interface GroupPropertyControl {
   prop: Property;
   control: AbstractControl;
-  type: string
+  type: string;
 }
 
 @Component({
@@ -32,43 +32,59 @@ export class ReactiveFormGroupComponent implements OnInit {
         const types: string[] = [];
         Promise.all(
           props.map(
-            prop => new Promise<AbstractControl>(
+            prop => new Promise<GroupPropertyControl>(
               (resolve, reject) => {
-                prop.getSchema()
+                Promise.all([prop.isReferenced(), prop.isMany(), prop.dataType.getSchema()])
                   .then(
-                    schema => {
-                      types.push(schema['type']);
-                      switch (schema['type']) {
-                        case 'object':
-                          resolve(new FormGroup({}));
-                          break;
-                        case 'array':
-                          resolve(new FormArray([]));
-                          break;
-                        default:
-                          resolve(new FormControl(schema['default']));
+                    (fullfill: Array<boolean | Object>) => {
+                      console.log(prop.name, '----', fullfill);
+                      if (fullfill[0]) { // Referenced
+                        if (fullfill[1]) { // Many
+                          resolve({
+                            prop: prop,
+                            control: new FormArray([]),
+                            type: 'ref-many'
+                          });
+                        } else { // One
+                          resolve({
+                            prop: prop,
+                            control: new FormControl(),
+                            type: 'ref-one'
+                          });
+                        }
+                      } else {
+                        const schema = <Object>fullfill[2];
+                        let control: AbstractControl;
+                        switch (schema['type']) {
+                          case 'object':
+                            control = new FormGroup({});
+                            break;
+                          case 'array':
+                            control = new FormArray([]);
+                            break;
+                          default:
+                            control = new FormControl(schema['default']);
+                        }
+                        resolve({
+                          prop: prop,
+                          control: control,
+                          type: schema['type']
+                        });
                       }
-                    })
+                    }
+                  )
                   .catch(error => reject(error));
               }
             )
           )
-        ).then((controls: AbstractControl[]) => {
-          this.propControls = controls.map<GroupPropertyControl>(
-            (control: AbstractControl, index: number) => {
-              this.componentFormGroup.addControl(props[index].name, control);
-              return {
-                prop: props[index],
-                control: control,
-                type: types[index]
-              };
-            }
-          );
+        ).then((controls: Array<GroupPropertyControl>) => {
+          this.propControls = controls;
           this.lazyLoader.complete();
         })
           .catch(error => this.lazyLoader.error(error));
       })
       .catch(error => this.lazyLoader.error(error));
+
     this.title = this.title || this.property.getTitle();
   }
 }
