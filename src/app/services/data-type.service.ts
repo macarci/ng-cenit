@@ -101,7 +101,7 @@ export class Property {
       (resolve, reject) => {
         this.getSchema()
           .then(
-            schema => resolve(['number', 'string', 'boolean'].indexOf(schema['type']) !== -1)
+            schema => resolve(['integer', 'number', 'string', 'boolean'].indexOf(schema['type']) !== -1)
           )
           .catch(error => reject(error));
       }

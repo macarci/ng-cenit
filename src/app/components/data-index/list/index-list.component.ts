@@ -78,23 +78,13 @@ export class IndexListComponent implements OnInit {
           this.dataType.getProps().then(
             (props: Property[]) => {
               Promise.all(
-                props.map(p => new Promise<Property>(
+                props.map(
+                  p => new Promise<Property>(
                   (res, rej) => {
-                    p.isVisible().then(
-                      visible => {
-                        if (visible) {
-                          p.isSimple().then(
-                            simple => {
-                              if (simple) {
-                                res(p);
-                              } else {
-                                res(null);
-                              }
-                            }).catch(e => rej(e));
-                        } else {
-                          res(null);
-                        }
-                      }).catch(e => rej(e));
+                    Promise.all([p.isSimple(), p.isVisible()])
+                      .then(takeIt => res(
+                        takeIt[0] && takeIt[1] ? p : null
+                      )).catch(e => rej(e));
                   }
                 ))
               ).then(
