@@ -1,5 +1,5 @@
 <mat-form-field>
-  <mat-select [placeholder]="label | async" [formControl]="refControl">
-  </mat-select>
+  <input matInput hidden [formControl]="refControl" [name]="property.name">
+  <cenit-ref-one-picker [dataType]="property.dataType" (refPicked)="pick($event)"></cenit-ref-one-picker>
   <mat-hint>{{description | async}}</mat-hint>
 </mat-form-field>

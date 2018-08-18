@@ -29,7 +29,6 @@ export class ReactiveFormGroupComponent implements OnInit {
   ngOnInit() {
     this.property.dataType.visibleProps()
       .then((props: Array<Property>) => {
-        const types: string[] = [];
         Promise.all(
           props.map(
             prop => new Promise<GroupPropertyControl>(
@@ -37,7 +36,6 @@ export class ReactiveFormGroupComponent implements OnInit {
                 Promise.all([prop.isReferenced(), prop.isMany(), prop.dataType.getSchema()])
                   .then(
                     (fullfill: Array<boolean | Object>) => {
-                      console.log(prop.name, '----', fullfill);
                       if (fullfill[0]) { // Referenced
                         if (fullfill[1]) { // Many
                           resolve({
@@ -77,8 +75,11 @@ export class ReactiveFormGroupComponent implements OnInit {
               }
             )
           )
-        ).then((controls: Array<GroupPropertyControl>) => {
-          this.propControls = controls;
+        ).then((ctrls: Array<GroupPropertyControl>) => {
+          ctrls.forEach(
+            ctrl => this.componentFormGroup.addControl(ctrl.prop.name, ctrl.control)
+          );
+          this.propControls = ctrls;
           this.lazyLoader.complete();
         })
           .catch(error => this.lazyLoader.error(error));

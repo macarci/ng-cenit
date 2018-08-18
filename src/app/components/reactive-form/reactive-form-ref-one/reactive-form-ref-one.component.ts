@@ -1,5 +1,5 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
 import {Property} from '../../../services/data-type.service';
 
 @Component({
@@ -9,7 +9,7 @@ import {Property} from '../../../services/data-type.service';
 })
 export class ReactiveFormRefOneComponent implements OnInit {
 
-  @Input() refControl: FormControl;
+  @Input() refControl: FormGroup;
   @Input() property: Property;
 
   title: Promise<string> | string;
@@ -18,5 +18,9 @@ export class ReactiveFormRefOneComponent implements OnInit {
   ngOnInit() {
     this.title = this.property.getTitle();
     this.description = this.property.getSchemaEntry<string>('description');
+  }
+
+  pick(id: string) {
+    this.refControl.setValue(id && {_id: id});
   }
 }
