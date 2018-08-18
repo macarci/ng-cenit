@@ -1,17 +1,25 @@
-<mat-expansion-panel>
-  <mat-expansion-panel-header>
-    <mat-panel-title>
-      {{title | async }}
-    </mat-panel-title>
-    <mat-panel-description>
-      This is a summary of the content
-    </mat-panel-description>
-
-  </mat-expansion-panel-header>
-  <button mat-button color="primary" (click)="loadForm()" *ngIf="blank">
+<div *ngIf="controls">
+  <mat-form-field>
+    <input
+      matInput
+      [placeholder]="title | async"
+      disabled
+      autocomplete="off"
+      [value]="label ? label : null">
+    <mat-hint>{{description | async}}</mat-hint>
+  </mat-form-field>
+  <button mat-button (click)="loadForm()" *ngIf="blank" color="primary">
     <mat-icon>add</mat-icon>
     New
   </button>
+  <button mat-icon-button *ngIf="!blank" (click)="hidden = !hidden">
+    <mat-icon>{{'arrow_drop_' + (hidden ? 'down' : 'up')}}</mat-icon>
+  </button>
+  <button mat-icon-button color="warn" *ngIf="!blank" (click)="delete()">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+<div class="form-group" [ngClass]="{hidden: hidden}">
   <cenit-lazy-loader [passive]="blank">
     <div [formGroup]="componentFormGroup">
       <div *ngFor="let propControl of propControls">
@@ -24,6 +32,7 @@
 
           <cenit-reactive-form-group
             [property]="propControl.prop"
+            [parentControl]="componentFormGroup"
             [componentFormGroup]="propControl.control"
             *ngSwitchCase="'object'"></cenit-reactive-form-group>
 
@@ -40,4 +49,4 @@
       </div>
     </div>
   </cenit-lazy-loader>
-</mat-expansion-panel>
+</div>

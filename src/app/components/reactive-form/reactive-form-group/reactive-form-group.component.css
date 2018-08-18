@@ -1,0 +1,8 @@
+.form-group {
+  padding-left: 10px;
+  border-left: solid darkslateblue;
+}
+
+.hidden {
+  display: none;
+}

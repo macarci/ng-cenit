@@ -13,6 +13,7 @@
 
           <cenit-reactive-form-group
             [property]="itemControl.prop"
+            [parentControl]="componentFormArray"
             [componentFormGroup]="itemControl.control"
             *ngSwitchCase="'object'"></cenit-reactive-form-group>
 

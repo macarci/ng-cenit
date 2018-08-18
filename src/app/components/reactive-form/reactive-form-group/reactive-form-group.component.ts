@@ -16,21 +16,34 @@ interface GroupPropertyControl {
 })
 export class ReactiveFormGroupComponent implements OnInit {
 
+  @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
+
   @Input() property: Property;
+  @Input() parentControl: FormGroup | FormArray;
   @Input() componentFormGroup: FormGroup;
   @Input() title: Promise<string> | string;
+  @Input() controls = true;
 
-  @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
+  nullControl: FormControl;
   propControls: GroupPropertyControl[];
-
+  description: Promise<string> | string;
+  label: Promise<string> | string;
   blank = true;
+  hidden = true;
 
   ngOnInit() {
     this.title = this.title || this.property.getTitle();
+    this.description = this.property.getSchemaEntry('description');
+    if (!this.controls){
+      this.loadForm();
+    } else {
+      this.delete();
+    }
   }
 
   loadForm() {
-    this.blank = false;
+    this.blank = this.hidden = false;
+    this.label = '<new>';
     this.property.dataType.visibleProps()
       .then((props: Array<Property>) => {
         Promise.all(
@@ -84,10 +97,28 @@ export class ReactiveFormGroupComponent implements OnInit {
             ctrl => this.componentFormGroup.addControl(ctrl.prop.name, ctrl.control)
           );
           this.propControls = ctrls;
+          if (this.parentControl.constructor === FormGroup) {
+            (<FormGroup>this.parentControl).setControl(this.property.name, this.componentFormGroup);
+          } else {
+            (<FormArray>this.parentControl).setControl(+this.property.name, this.componentFormGroup);
+          }
           this.lazyLoader.complete();
         })
           .catch(error => this.lazyLoader.error(error));
       })
       .catch(error => this.lazyLoader.error(error));
+  }
+
+  delete() {
+    this.hidden = this.blank = true;
+    this.label = null;
+    if (!this.nullControl) {
+      this.nullControl = new FormControl(null);
+    }
+    if (this.parentControl.constructor === FormGroup) {
+      (<FormGroup>this.parentControl).setControl(this.property.name, this.nullControl);
+    } else {
+      (<FormArray>this.parentControl).setControl(+this.property.name, this.nullControl);
+    }
   }
 }
