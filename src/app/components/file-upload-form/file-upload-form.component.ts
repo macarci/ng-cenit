@@ -43,7 +43,7 @@ export class FileUploadFormComponent implements OnInit {
     this.authService.getAccessToken()
       .then(
         (access_token: string) => {
-          this.uploadUrl = this.dataType.apiService.apiURL(['setup', 'data_type', this.dataType.id, 'digest']);
+          this.uploadUrl = this.dataType.apiService.apiURL(['setup', 'data_type', this.dataType.id, 'digest', 'upload']);
           this.headers = {Authorization: 'Bearer ' + access_token};
           this.lazyLoader.complete();
         }

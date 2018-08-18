@@ -182,7 +182,7 @@ export class DataType {
           if (this.schema) {
             resolve(this.schema);
           } else {
-            this.apiService.get(['setup', 'data_type', this.id, 'digest']).subscribe(
+            this.apiService.get(['setup', 'data_type', this.id, 'digest', 'schema']).subscribe(
               schema => {
                 this.schema = schema;
                 resolve(schema);
@@ -257,7 +257,7 @@ export class DataType {
     return new Promise<Object>(
       (resolve, reject) => {
         if (schema['extends'] || schema['$ref']) {
-          this.apiService.digest(['setup', 'data_type', this.id], schema).subscribe(
+          this.apiService.post(['setup', 'data_type', this.id, 'digest', 'schema'], schema).subscribe(
             mergedSchema => resolve(mergedSchema),
             error => reject(error)
           );
