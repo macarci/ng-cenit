@@ -1,29 +1,43 @@
-<cenit-lazy-loader>
-  <div [formGroup]="componentFormGroup" class="form-group">
-    <h3>{{title | async }}</h3>
-    <fieldset *ngFor="let propControl of propControls">
-      <div [ngSwitch]="propControl.type">
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{title | async }}
+    </mat-panel-title>
+    <mat-panel-description>
+      This is a summary of the content
+    </mat-panel-description>
 
-        <cenit-reactive-field
-          [fieldFormControl]="propControl.control"
-          [property]="propControl.prop"
-          *ngSwitchDefault></cenit-reactive-field>
+  </mat-expansion-panel-header>
+  <button mat-button color="primary" (click)="loadForm()" *ngIf="blank">
+    <mat-icon>add</mat-icon>
+    New
+  </button>
+  <cenit-lazy-loader [passive]="blank">
+    <div [formGroup]="componentFormGroup">
+      <div *ngFor="let propControl of propControls">
+        <div [ngSwitch]="propControl.type">
 
-        <cenit-reactive-form-group
-          [property]="propControl.prop"
-          [componentFormGroup]="propControl.control"
-          *ngSwitchCase="'object'"></cenit-reactive-form-group>
+          <cenit-reactive-field
+            [fieldFormControl]="propControl.control"
+            [property]="propControl.prop"
+            *ngSwitchDefault></cenit-reactive-field>
 
-        <cenit-reactive-form-array
-          [property]="propControl.prop"
-          [componentFormArray]="propControl.control"
-          *ngSwitchCase="'array'"></cenit-reactive-form-array>
+          <cenit-reactive-form-group
+            [property]="propControl.prop"
+            [componentFormGroup]="propControl.control"
+            *ngSwitchCase="'object'"></cenit-reactive-form-group>
 
-        <cenit-reactive-form-ref-one
-          [property]="propControl.prop"
-          [refControl]="propControl.control"
-          *ngSwitchCase="'ref-one'"></cenit-reactive-form-ref-one>
+          <cenit-reactive-form-array
+            [property]="propControl.prop"
+            [componentFormArray]="propControl.control"
+            *ngSwitchCase="'array'"></cenit-reactive-form-array>
+
+          <cenit-reactive-form-ref-one
+            [property]="propControl.prop"
+            [refControl]="propControl.control"
+            *ngSwitchCase="'ref-one'"></cenit-reactive-form-ref-one>
+        </div>
       </div>
-    </fieldset>
-  </div>
-</cenit-lazy-loader>
+    </div>
+  </cenit-lazy-loader>
+</mat-expansion-panel>

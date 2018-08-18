@@ -23,10 +23,14 @@ export class ReactiveFormGroupComponent implements OnInit {
   @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
   propControls: GroupPropertyControl[];
 
-  constructor() {
-  }
+  blank = true;
 
   ngOnInit() {
+    this.title = this.title || this.property.getTitle();
+  }
+
+  loadForm() {
+    this.blank = false;
     this.property.dataType.visibleProps()
       .then((props: Array<Property>) => {
         Promise.all(
@@ -85,7 +89,5 @@ export class ReactiveFormGroupComponent implements OnInit {
           .catch(error => this.lazyLoader.error(error));
       })
       .catch(error => this.lazyLoader.error(error));
-
-    this.title = this.title || this.property.getTitle();
   }
 }

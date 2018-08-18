@@ -1,5 +1,28 @@
-<mat-form-field>
-  <input matInput hidden [formControl]="refControl" [name]="property.name">
-  <cenit-ref-one-picker [dataType]="property.dataType" (refPicked)="pick($event)"></cenit-ref-one-picker>
-  <mat-hint>{{description | async}}</mat-hint>
-</mat-form-field>
+<cenit-lazy-loader #controlLoader>
+  <mat-form-field>
+    <input
+      matInput
+      [name]="property.name"
+      [placeholder]="title | async"
+      (input)="typing()"
+      [matMenuTriggerFor]="menu"
+      autocomplete="off"
+      (focus)="requestItems()"
+      #input>
+    <button matSuffix mat-icon-button color="warn" (click)="pickItem(null)" *ngIf="pickedItem">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" [overlapTrigger]="false" (closed)="menuClosed()">
+      <cenit-lazy-loader #menuLoader>
+        <button
+          mat-menu-item
+          *ngFor="let item of items"
+          (click)="pickItem(item)">
+          {{item.label}}
+        </button>
+      </cenit-lazy-loader>
+    </mat-menu>
+    <mat-hint>{{description | async}}</mat-hint>
+  </mat-form-field>
+</cenit-lazy-loader>
+

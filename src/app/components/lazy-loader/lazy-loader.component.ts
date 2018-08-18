@@ -8,6 +8,7 @@ import {Observable, Observer, Subscription} from 'rxjs';
 })
 export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> {
 
+  @Input() passive: boolean;
   loading = true;
   errorDescription: string;
   @Input() status: string;

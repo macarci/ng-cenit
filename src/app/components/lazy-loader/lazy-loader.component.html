@@ -2,7 +2,7 @@
   <div class="shade-loading" *ngIf="loading; else err_content">
     <mat-spinner *ngIf="type == 'spinner'; else bar"></mat-spinner>
     <ng-template #bar>
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <mat-progress-bar [mode]="passive ? 'determinate' : 'indeterminate'"></mat-progress-bar>
     </ng-template>
     <span>{{status}}</span>
   </div>
