@@ -1,0 +1,9 @@
+.form-array {
+  padding-left: 10px;
+  margin-bottom: 15px;
+  border-left: solid darkslateblue;
+}
+
+.hidden {
+  display: none;
+}

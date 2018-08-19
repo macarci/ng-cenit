@@ -24,7 +24,7 @@
           <mat-icon class="tab-icon">{{action.icon}}</mat-icon>
           {{action.name}}
         </ng-template>
-        <div [ngSwitch]="action.key">
+        <div [ngSwitch]="action.key"  class="restore-tabs">
           <cenit-data-index-list [indexContent]="indexContent" *ngSwitchCase="''"></cenit-data-index-list>
           <cenit-data-index-create [indexContent]="indexContent" *ngSwitchCase="'new'"></cenit-data-index-create>
         </div>

@@ -7,3 +7,7 @@
 .header-less-tabs .mat-tab-group .mat-tab-header {
   display: none;
 }
+
+.restore-tabs .mat-tab-group .mat-tab-header {
+  display: flex;
+}

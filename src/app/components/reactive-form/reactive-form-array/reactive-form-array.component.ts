@@ -25,12 +25,12 @@ export class ReactiveFormArrayComponent implements OnInit {
   description: Promise<string> | string;
   label: string;
   currentIndex: number;
+  hidden = true;
 
   constructor() {
   }
 
   ngOnInit() {
-    this.currentIndex = 0;
     this.title = this.title || this.property.getTitle();
     this.description = this.property.getSchemaEntry('description');
     this.label = null;
@@ -53,7 +53,8 @@ export class ReactiveFormArrayComponent implements OnInit {
     });
     this.componentFormArray.push(control);
     this.label = this.itemControls.length.toString() + ' items';
-    this.currentIndex = this.itemControls.length - 1;
+    this.tabGroup.selectedIndex = this.itemControls.length - 1;
+    this.hidden = false;
   }
 
   controlFor(schema): AbstractControl {
@@ -67,17 +68,14 @@ export class ReactiveFormArrayComponent implements OnInit {
     }
   }
 
-  handleItemDeleted(index) {
+  deleteAt(index) {
     this.componentFormArray.removeAt(index);
     this.itemControls.splice(index, 1);
     if (this.itemControls.length === 0) {
+      this.hidden = true;
       this.label = null;
     } else {
       this.label = this.itemControls.length.toString() + ' items';
     }
-  }
-
-  tagSelected(event: MatTabChangeEvent) {
-    this.currentIndex = event.index;
   }
 }

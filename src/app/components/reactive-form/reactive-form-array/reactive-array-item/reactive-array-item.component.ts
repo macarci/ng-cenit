@@ -4,7 +4,6 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   selector: 'cenit-reactive-array-item',
   templateUrl: './reactive-array-item.component.html',
   styleUrls: ['./reactive-array-item.component.css']
-  // viewProviders: [{provide: ControlContainer, useExisting: NgModelGroup}]
 })
 export class ReactiveArrayItemComponent {
 

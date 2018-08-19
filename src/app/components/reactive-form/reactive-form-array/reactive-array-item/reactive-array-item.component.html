@@ -1,4 +1,6 @@
-<div class="form-group">
+<div>
+  <button class="right" mat-icon-button color="warn" (click)="triggerDelete()">
+    <mat-icon>delete</mat-icon>
+  </button>
   <ng-content></ng-content>
-  <button class="btn-danger" (click)="triggerDelete()">Delete</button>
 </div>
