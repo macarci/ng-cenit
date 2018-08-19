@@ -1,28 +1,44 @@
 <cenit-lazy-loader>
-  <div [formGroup]="componentFormArray" class="form-group">
-    <h3>{{name}}</h3>
-    <button class="btn-primary" (click)="addNewItem()">Add new</button>
-    <div *ngFor="let itemControl of itemControls; let idx = index">
-      <cenit-reactive-array-item (delete)="handleItemDeleted($event)">
-        <div [ngSwitch]="itemsSchema['type']">
+  <div [formGroup]="componentFormArray">
+    <mat-form-field>
+      <input
+        matInput
+        [placeholder]="title | async"
+        disabled
+        autocomplete="off"
+        [value]="label">
+      <mat-hint>{{description | async}}</mat-hint>
+    </mat-form-field>
+    <button mat-button color="primary" (click)="addNewItem()">
+     <mat-icon>add</mat-icon>New
+    </button>
+    <mat-tab-group [selectedIndex]="currentIndex" (selectedTabChange)="tagSelected($event)">
+      <mat-tab *ngFor="let itemControl of itemControls">
+        <ng-template mat-tab-label>
+          <label>{{itemControl.prop.name}}</label>
+        </ng-template>
+        <cenit-reactive-array-item (delete)="handleItemDeleted($event)">
+          <div [ngSwitch]="itemsSchema['type']">
 
-          <cenit-reactive-field
-            [fieldFormControl]="itemControl.control"
-            [property]="itemControl.prop"
-            *ngSwitchDefault></cenit-reactive-field>
+            <cenit-reactive-field
+              [fieldFormControl]="itemControl.control"
+              [property]="itemControl.prop"
+              *ngSwitchDefault></cenit-reactive-field>
 
-          <cenit-reactive-form-group
-            [property]="itemControl.prop"
-            [parentControl]="componentFormArray"
-            [componentFormGroup]="itemControl.control"
-            *ngSwitchCase="'object'"></cenit-reactive-form-group>
+            <cenit-reactive-form-group
+              [controls]="false"
+              [property]="itemControl.prop"
+              [parentControl]="componentFormArray"
+              [componentFormGroup]="itemControl.control"
+              *ngSwitchCase="'object'"></cenit-reactive-form-group>
 
-          <cenit-reactive-form-array
-            [property]="itemControl.prop"
-            [componentFormArray]="itemControl.control"
-            *ngSwitchCase="'array'"></cenit-reactive-form-array>
-        </div>
-      </cenit-reactive-array-item>
-    </div>
+            <cenit-reactive-form-array
+              [property]="itemControl.prop"
+              [componentFormArray]="itemControl.control"
+              *ngSwitchCase="'array'"></cenit-reactive-form-array>
+          </div>
+        </cenit-reactive-array-item>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </cenit-lazy-loader>

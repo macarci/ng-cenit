@@ -2,6 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Property} from '../../../services/data-type.service';
 import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
+import {MatTabChangeEvent, MatTabGroup} from '@angular/material';
 
 @Component({
   selector: 'cenit-reactive-form-array',
@@ -15,14 +16,24 @@ export class ReactiveFormArrayComponent implements OnInit {
   @Input() property: Property;
   @Input() componentFormArray: FormArray;
 
-  @ViewChild(LazyLoaderComponent) lazyLoader;
+  @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   itemsSchema: Object;
   itemControls: Array<{ control: AbstractControl; prop: Property }>;
+
+  title: Promise<string> | string;
+  description: Promise<string> | string;
+  label: string;
+  currentIndex: number;
 
   constructor() {
   }
 
   ngOnInit() {
+    this.currentIndex = 0;
+    this.title = this.title || this.property.getTitle();
+    this.description = this.property.getSchemaEntry('description');
+    this.label = null;
     this.name = this.name || this.property.name;
     this.itemControls = [];
     this.property.dataType.getSchema()
@@ -32,7 +43,6 @@ export class ReactiveFormArrayComponent implements OnInit {
           this.lazyLoader.complete();
         })
       .catch(error => this.lazyLoader.error(error));
-    console.log(this.name, 'ARRAY INITIALIZED');
   }
 
   addNewItem() {
@@ -42,6 +52,8 @@ export class ReactiveFormArrayComponent implements OnInit {
       prop: new Property(this.itemControls.length.toString(), this.property.dataType)
     });
     this.componentFormArray.push(control);
+    this.label = this.itemControls.length.toString() + ' items';
+    this.currentIndex = this.itemControls.length - 1;
   }
 
   controlFor(schema): AbstractControl {
@@ -57,5 +69,15 @@ export class ReactiveFormArrayComponent implements OnInit {
 
   handleItemDeleted(index) {
     this.componentFormArray.removeAt(index);
+    this.itemControls.splice(index, 1);
+    if (this.itemControls.length === 0) {
+      this.label = null;
+    } else {
+      this.label = this.itemControls.length.toString() + ' items';
+    }
+  }
+
+  tagSelected(event: MatTabChangeEvent) {
+    this.currentIndex = event.index;
   }
 }
