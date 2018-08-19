@@ -370,7 +370,11 @@ export class DataType {
         }
         resolveDataType.then(
           (dataType: DataType) => {
-            propResolve(new Property(name, dataType, schema));
+            dataType.mergeSchema(schema)
+              .then(
+                mergedSchema => propResolve(new Property(name, dataType, mergedSchema))
+              )
+              .catch(error => propReject(error));
           }
         ).catch(error => propReject(error));
       }

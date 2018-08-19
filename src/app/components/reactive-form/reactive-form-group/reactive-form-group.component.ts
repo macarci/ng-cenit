@@ -50,7 +50,7 @@ export class ReactiveFormGroupComponent implements OnInit {
           props.map(
             prop => new Promise<GroupPropertyControl>(
               (resolve, reject) => {
-                Promise.all([prop.isReferenced(), prop.isMany(), prop.dataType.getSchema()])
+                Promise.all([prop.isReferenced(), prop.isMany(), prop.getSchema()])
                   .then(
                     (fullfill: Array<boolean | Object>) => {
                       if (fullfill[0]) { // Referenced
@@ -97,6 +97,7 @@ export class ReactiveFormGroupComponent implements OnInit {
             ctrl => this.componentFormGroup.addControl(ctrl.prop.name, ctrl.control)
           );
           this.propControls = ctrls;
+          console.log(this.propControls);
           if (this.parentControl.constructor === FormGroup) {
             (<FormGroup>this.parentControl).setControl(this.property.name, this.componentFormGroup);
           } else {
