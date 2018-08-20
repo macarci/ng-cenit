@@ -26,7 +26,7 @@ export class ReactiveFormRefComponent implements OnInit {
                   (type, index) => {
                     return type === 'string' ? props[index] : null;
                   }
-                ).filter(p => p);
+                ).filter(p => p).slice(0, 4);
                 this.controlLoaderComplete();
               }
             ).catch(error => this.controlLoaderError(error));
@@ -47,9 +47,13 @@ export class ReactiveFormRefComponent implements OnInit {
       limit: limit.toString()
     };
     if (inputQuery.length > 0) {
+      const orQuery = [];
       for (const prop of this.queryProps) {
-        query[prop.name] = JSON.stringify({'$regex': '(?i)' + inputQuery});
+        const propRegx = {};
+        propRegx[prop.name] = {'$regex': '(?i)' + inputQuery};
+        orQuery.push(propRegx);
       }
+      query['$or'] = JSON.stringify(orQuery);
     }
     this.property.dataType.apiService.get(['setup', 'data_type', this.property.dataType.id, 'digest'], {
       query: query,
