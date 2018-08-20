@@ -4,30 +4,43 @@ import {ApiService} from './api.service';
 @Injectable()
 export class DataTypeService {
 
+  dataTypes: { [key: string]: DataType } = {};
+  promises: { [key: string]: Promise<DataType> } = {};
+
   constructor(readonly apiService: ApiService) {
   }
 
-  getById(id: string): Promise<DataType> {
-    return new Promise<DataType>(
-      (resolve, reject) => {
-        this.apiService.get(['setup', 'data_type', id], {template: {viewport: '{_id namespace name title _type schema}'}})
-          .subscribe(
-            (response) => {
-              const dataType = new DataType(
-                response['_id'],
-                response['_type'],
-                response['namespace'],
-                response['name'],
-                response['title'],
-                response['_type'] === JSON_TYPE ? null : response['schema']
+  async getById(id: string): Promise<DataType> {
+    let promise = this.promises[id];
+    if (!promise) {
+      this.promises[id] = promise = new Promise<DataType>(
+        (resolve, reject) => {
+          let dataType = this.dataTypes[id];
+          if (!dataType) {
+            this.apiService.get(['setup', 'data_type', id], {template: {viewport: '{_id namespace name title _type schema}'}})
+              .subscribe(
+                (response) => {
+                  this.dataTypes[id] = dataType = new DataType(
+                    response['_id'],
+                    response['_type'],
+                    response['namespace'],
+                    response['name'],
+                    response['title'],
+                    response['_type'] === JSON_TYPE ? null : response['schema']
+                  );
+                  dataType.dataTypeService = this;
+                  dataType.apiService = this.apiService;
+                  resolve(dataType);
+                  delete this.promises[id];
+                },
+                error => reject(error)
               );
-              dataType.dataTypeService = this;
-              dataType.apiService = this.apiService;
-              resolve(dataType);
-            },
-            error => reject(error)
-          );
-      });
+          } else {
+            resolve(dataType);
+          }
+        });
+    }
+    return await promise;
   }
 
   find(criteria: Object): Promise<DataType> {
