@@ -1,34 +1,17 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {Component, Input, OnInit} from '@angular/core';
 import {Property} from '../../../services/data-type.service';
-import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
-import {MatMenuTrigger} from '@angular/material';
 
-@Component({
-  selector: 'cenit-reactive-form-ref-one',
-  templateUrl: './reactive-form-ref-one.component.html',
-  styleUrls: ['./reactive-form-ref-one.component.css']
-})
-export class ReactiveFormRefOneComponent implements OnInit {
+@Component({})
+export class ReactiveFormRefComponent implements OnInit {
 
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-  @ViewChild('input') input: ElementRef<HTMLInputElement>;
-  @ViewChild('controlLoader') controlLoader: LazyLoaderComponent;
-  @ViewChild('menuLoader') menuLoader: LazyLoaderComponent;
-
-  @Input() refControl: FormGroup;
   @Input() property: Property;
 
   title: Promise<string> | string;
   description: Promise<string> | string;
 
-
   dataTypeTitle: string;
-  items: Array<RefItem>;
-  typingTimer: number;
-
-  pickedItem: RefItem;
   queryProps: Property[];
+  items: RefItem[];
 
   ngOnInit() {
     this.title = this.property.getTitle();
@@ -44,16 +27,22 @@ export class ReactiveFormRefOneComponent implements OnInit {
                     return type === 'string' ? props[index] : null;
                   }
                 ).filter(p => p);
-                this.controlLoader.complete();
+                this.controlLoaderComplete();
               }
-            ).catch(error => this.controlLoader.error(error));
+            ).catch(error => this.controlLoaderError(error));
         }
-      ).catch(error => this.controlLoader.error(error));
+      ).catch(error => this.controlLoaderError(error));
   }
 
-  requestItems() {
+  protected controlLoaderComplete() {
+  }
+
+  protected controlLoaderError(error) {
+  }
+
+  requestItems(inputQuery?: string) {
     const limit = 5;
-    const inputQuery = (this.input.nativeElement.value || '').toString().trim();
+    inputQuery = (inputQuery || '').toString().trim();
     const query = {
       limit: limit.toString()
     };
@@ -74,15 +63,20 @@ export class ReactiveFormRefOneComponent implements OnInit {
             title => {
               this.items = response['items'].map(item => this.toItem(item));
               this.dataTypeTitle = title;
-              this.menuLoader.complete();
+              this.itemsLoaderComplete();
             }
           ).catch(
-          error => this.menuLoader.error(error)
+          error => this.itemsLoaderError(error)
         );
       },
-      error => this.menuLoader.error(error)
+      error => this.itemsLoaderError(error)
     );
-    this.menuLoader.reload();
+  }
+
+  protected itemsLoaderComplete() {
+  }
+
+  protected itemsLoaderError(error) {
   }
 
   toItem(responseItem: Object): RefItem {
@@ -94,27 +88,6 @@ export class ReactiveFormRefOneComponent implements OnInit {
       id: responseItem['_id'],
       label: label
     };
-  }
-
-  pickItem(item: RefItem) {
-    this.pickedItem = item;
-    this.refControl.setValue(item ? {_id: item.id} : null);
-    this.input.nativeElement.value = item ? item.label : null;
-  }
-
-  menuClosed() {
-    this.pickItem(this.pickedItem);
-  }
-
-  typing() {
-    if (this.typingTimer) {
-      window.clearTimeout(this.typingTimer);
-    }
-    this.typingTimer = setTimeout(() => {
-      this.typingTimer = null;
-      this.requestItems();
-      this.trigger.openMenu();
-    }, 1000);
   }
 }
 

@@ -3,7 +3,7 @@
     <input
       matInput
       [placeholder]="title | async"
-      disabled
+      readonly
       autocomplete="off"
       [value]="label ? label : null">
     <mat-hint>{{description | async}}</mat-hint>
@@ -45,6 +45,11 @@
             [property]="propControl.prop"
             [refControl]="propControl.control"
             *ngSwitchCase="'ref-one'"></cenit-reactive-form-ref-one>
+
+          <cenit-reactive-form-ref-many
+            [property]="propControl.prop"
+            [componentFormArray]="propControl.control"
+            *ngSwitchCase="'ref-many'"></cenit-reactive-form-ref-many>
         </div>
       </div>
     </div>

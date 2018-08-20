@@ -3,7 +3,7 @@
     <input
       matInput
       [placeholder]="title | async"
-      disabled
+      readonly
       autocomplete="off"
       [value]="label">
     <mat-hint>{{description | async}}</mat-hint>

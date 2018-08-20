@@ -24,7 +24,6 @@ export class ReactiveFormArrayComponent implements OnInit {
   title: Promise<string> | string;
   description: Promise<string> | string;
   label: string;
-  currentIndex: number;
   hidden = true;
 
   constructor() {

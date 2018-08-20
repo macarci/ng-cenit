@@ -1,0 +1,10 @@
+<mat-chip
+  selected
+  [removable]="true"
+  [color]="color"
+  (removed)="triggerDelete()"
+  (mouseenter)="onOver(true)"
+  (mouseleave)="onOver(false)">
+  {{item.label}}
+  <mat-icon matChipRemove *ngIf="over" color="warn">delete</mat-icon>
+</mat-chip>

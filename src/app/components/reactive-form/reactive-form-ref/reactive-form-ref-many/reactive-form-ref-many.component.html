@@ -1,0 +1,44 @@
+<cenit-lazy-loader #controlLoader>
+  <mat-form-field>
+    <input
+      matInput
+      [name]="property.name"
+      [placeholder]="title | async"
+      (input)="typing()"
+      [matMenuTriggerFor]="menu"
+      autocomplete="off"
+      (click)="enableInput()"
+      [value]="itemsLabel"
+      [readonly]="itemsLabel"
+      #input>
+    <mat-menu #menu="matMenu" [overlapTrigger]="false" (closed)="menuClosed()">
+      <cenit-lazy-loader #menuLoader>
+        <button
+          mat-menu-item
+          *ngFor="let item of items"
+          (click)="pickItem(item)">
+          {{item.label}}
+        </button>
+      </cenit-lazy-loader>
+    </mat-menu>
+    <mat-hint>{{description | async}}</mat-hint>
+  </mat-form-field>
+  <button mat-icon-button *ngIf="controlItems.length > 0" (click)="hidden = !hidden">
+    <mat-icon>{{'arrow_drop_' + (hidden ? 'down' : 'up')}}</mat-icon>
+  </button>
+  <button mat-button color="primary">
+    <mat-icon>add</mat-icon>
+    New
+  </button>
+  <div class="form-group" [ngClass]="{hidden: hidden && controlItems.length > 0}">
+    <mat-chip-list>
+      <cenit-reactive-array-item-ref
+        *ngFor="let item of controlItems; let index = index"
+        [index]="index"
+        [item]="item"
+        (remove)="removeAt(index)"
+      >
+      </cenit-reactive-array-item-ref>
+    </mat-chip-list>
+  </div>
+</cenit-lazy-loader>

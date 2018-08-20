@@ -18,7 +18,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatCheckboxModule,
-  MatSelectModule
+  MatSelectModule,
+  MatChipsModule
 } from '@angular/material';
 
 import {CenitComponent} from './cenit.component';
@@ -51,7 +52,9 @@ import {InputControlComponent} from './components/reactive-form/reactive-field/i
 import {EnumControlComponent} from './components/reactive-form/reactive-field/enum-control/enum-control.component';
 import {BooleanControlComponent} from './components/reactive-form/reactive-field/boolean-control/boolean-control.component';
 import {FileUploadFormComponent} from './components/file-upload-form/file-upload-form.component';
-import {ReactiveFormRefOneComponent} from './components/reactive-form/reactive-form-ref-one/reactive-form-ref-one.component';
+import {ReactiveFormRefOneComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-one/reactive-form-ref-one.component';
+import {ReactiveFormRefManyComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-many/reactive-form-ref-many.component';
+import {ReactiveArrayItemRefComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-many/reactive-array-item-ref/reactive-array-item-ref.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -87,7 +90,9 @@ const appRoutes: Routes = [
     EnumControlComponent,
     BooleanControlComponent,
     FileUploadFormComponent,
-    ReactiveFormRefOneComponent
+    ReactiveFormRefOneComponent,
+    ReactiveFormRefManyComponent,
+    ReactiveArrayItemRefComponent
   ],
   imports: [
     BrowserModule,
@@ -113,7 +118,8 @@ const appRoutes: Routes = [
     MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatGridListModule
+    MatGridListModule,
+    MatChipsModule
   ],
   providers: [
     AuthService,
