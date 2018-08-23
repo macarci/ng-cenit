@@ -33,10 +33,10 @@ export class ReactiveFormGroupComponent implements OnInit {
   hidden = true;
 
   ngOnInit() {
-    this.data = this.data || {};
     this.title = this.title || this.property.getTitle();
     this.description = this.property.getSchemaEntry('description');
-    if (this.controls) {
+    this.data = this.validateData(this.data);
+    if (this.controls && Object.keys(this.data).length === 0) {
       this.delete();
     } else {
       this.loadForm();
@@ -44,7 +44,8 @@ export class ReactiveFormGroupComponent implements OnInit {
   }
 
   loadForm() {
-    this.blank = this.hidden = false;
+    this.blank = Object.keys(this.data).length === 0;
+    this.hidden = this.controls && !this.blank;
     this.label = '<new>';
     this.property.dataType.visibleProps()
       .then((props: Array<Property>) => {
@@ -113,6 +114,7 @@ export class ReactiveFormGroupComponent implements OnInit {
 
   delete() {
     this.hidden = this.blank = true;
+    this.data = {};
     this.label = null;
     if (!this.nullControl) {
       this.nullControl = new FormControl(null);
@@ -125,7 +127,14 @@ export class ReactiveFormGroupComponent implements OnInit {
   }
 
   setData(data: Object) {
-    this.data = data || {};
+    this.data = this.validateData(data);
     this.loadForm();
+  }
+
+  validateData(data): Object {
+    if (!data || data.constructor !== Object) {
+      data = {};
+    }
+    return data;
   }
 }

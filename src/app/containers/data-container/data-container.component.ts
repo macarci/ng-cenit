@@ -142,12 +142,16 @@ export class ModelContent extends DataContent {
     return this.model;
   }
 
-  getApiParams(): string[] {
+  getModelApiParams(): string[] {
     const params = this.model.split('~');
     if (params.length === 1) {
       return ['setup', params[0]];
     }
     return [params.shift(), params.join('~')];
+  }
+
+  getApiParams(): string[] {
+    return this.getModelApiParams();
   }
 
   async getDataType(): Promise<DataType> {
@@ -158,7 +162,7 @@ export class ModelContent extends DataContent {
         this.dataTypePromise = new Promise<DataType>(
           (resolve, reject) => {
             const handleError = error => reject(error);
-            this.dataTypeService.apiService.get(this.getApiParams(), {query: {limit: 0}})
+            this.dataTypeService.apiService.get(this.getModelApiParams(), {query: {limit: 0}})
               .subscribe(
                 response => {
                   this.dataTypeId = response['data_type']['_id'];

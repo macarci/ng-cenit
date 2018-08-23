@@ -3,6 +3,7 @@ import {FormArray, FormControl} from '@angular/forms';
 import {LazyLoaderComponent} from '../../../lazy-loader/lazy-loader.component';
 import {MatMenuTrigger} from '@angular/material';
 import {ReactiveFormRefComponent, RefItem} from '../reactive-form-ref.component';
+import {concat} from 'rxjs';
 
 @Component({
   selector: 'cenit-reactive-form-ref-many',
@@ -29,7 +30,29 @@ export class ReactiveFormRefManyComponent extends ReactiveFormRefComponent {
   }
 
   protected controlLoaderComplete() {
-    this.controlLoader.complete();
+    if (this.data) {
+      concat(
+        ...(<Array<Object>>this.data).map(
+          dataItem => this.property.dataType.apiService.get<Object>(
+            ['setup', 'data_type', this.property.dataType.id, 'digest'],
+            {
+              query: {id: dataItem['_id']},
+              template: {
+                viewport: '{_id ' + this.queryProps.map(p => p.name).join(' ') + '}'
+              }
+            })
+        )
+      ).subscribe(
+        response => {
+          this.pickItem(this.toItem(response['items'][0]), true);
+        },
+        error => {
+        },
+        () => this.controlLoader.complete()
+      );
+    } else {
+      this.controlLoader.complete();
+    }
   }
 
   protected controlLoaderError(error) {
@@ -52,14 +75,14 @@ export class ReactiveFormRefManyComponent extends ReactiveFormRefComponent {
     }
   }
 
-  pickItem(item: RefItem) {
+  pickItem(item: RefItem, hidden?: boolean) {
     if (item) {
       this.componentFormArray.setControl(
         this.controlItems.length,
         new FormControl({_reference: true, _id: item.id})
       );
       this.controlItems.push(item);
-      this.hidden = false;
+      this.hidden = hidden || false;
     }
     this.updateItemsLabel();
   }
@@ -93,5 +116,21 @@ export class ReactiveFormRefManyComponent extends ReactiveFormRefComponent {
       this.input.nativeElement.focus();
       this.requestItems();
     });
+  }
+
+  validateData(data): Object[] {
+    if (data && data.constructor === Array) {
+      return (<Array>data).map(
+        item => {
+          let id;
+          if (item && item.constructor === Object &&
+            (id = item['_id'] || item['id']) && id.constructor === String) {
+            return {_reference: true, _id: id};
+          }
+          return null;
+        }
+      ).filter(item => item);
+    }
+    return null;
   }
 }

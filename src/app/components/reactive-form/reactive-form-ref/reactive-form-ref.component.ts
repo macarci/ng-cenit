@@ -4,6 +4,7 @@ import {Property} from '../../../services/data-type.service';
 @Component({})
 export class ReactiveFormRefComponent implements OnInit {
 
+  @Input() data;
   @Input() property: Property;
 
   title: Promise<string> | string;
@@ -14,6 +15,7 @@ export class ReactiveFormRefComponent implements OnInit {
   items: RefItem[];
 
   ngOnInit() {
+    this.data = this.validateData(this.data);
     this.title = this.property.getTitle();
     this.description = this.property.getSchemaEntry<string>('description');
     this.property.dataType.getProps()
@@ -84,14 +86,21 @@ export class ReactiveFormRefComponent implements OnInit {
   }
 
   toItem(responseItem: Object): RefItem {
-    const label = responseItem['name'] ||
-      responseItem['title'] ||
-      responseItem['filename'] ||
-      (this.dataTypeTitle + ' ' + responseItem['_id']);
-    return {
-      id: responseItem['_id'],
-      label: label
-    };
+    if (responseItem) {
+      const label = responseItem['name'] ||
+        responseItem['title'] ||
+        responseItem['filename'] ||
+        (this.dataTypeTitle + ' ' + responseItem['_id']);
+      return {
+        id: responseItem['_id'],
+        label: label
+      };
+    }
+    return null;
+  }
+
+  validateData(data): Object {
+    throw new Error('not yet implemented');
   }
 }
 

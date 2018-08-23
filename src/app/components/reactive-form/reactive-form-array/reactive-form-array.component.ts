@@ -12,6 +12,7 @@ import {MatTabChangeEvent, MatTabGroup} from '@angular/material';
 })
 export class ReactiveFormArrayComponent implements OnInit {
 
+  @Input() data: Array<any>;
   @Input() name: string;
   @Input() property: Property;
   @Input() componentFormArray: FormArray;
@@ -30,6 +31,7 @@ export class ReactiveFormArrayComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.data = this.validateData(this.data);
     this.title = this.title || this.property.getTitle();
     this.description = this.property.getSchemaEntry('description');
     this.label = null;
@@ -39,12 +41,13 @@ export class ReactiveFormArrayComponent implements OnInit {
       .then(
         (schema: Object) => {
           this.itemsSchema = schema;
+          this.data.forEach(item => this.addNewItem(true));
           this.lazyLoader.complete();
         })
       .catch(error => this.lazyLoader.error(error));
   }
 
-  addNewItem() {
+  addNewItem(hidden?: boolean) {
     const control = this.controlFor(this.itemsSchema);
     this.itemControls.push({
       control: control,
@@ -53,7 +56,7 @@ export class ReactiveFormArrayComponent implements OnInit {
     this.componentFormArray.push(control);
     this.label = this.itemControls.length.toString() + ' items';
     this.tabGroup.selectedIndex = this.itemControls.length - 1;
-    this.hidden = false;
+    this.hidden = hidden || false;
   }
 
   controlFor(schema): AbstractControl {
@@ -76,5 +79,12 @@ export class ReactiveFormArrayComponent implements OnInit {
     } else {
       this.label = this.itemControls.length.toString() + ' items';
     }
+  }
+
+  validateData(data): Array<any> {
+    if (!data || data.constructor !== Array) {
+      data = [];
+    }
+    return data;
   }
 }

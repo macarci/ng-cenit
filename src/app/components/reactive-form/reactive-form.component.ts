@@ -14,6 +14,7 @@ export class ReactiveFormComponent implements OnInit {
 
   @Output() submit = new EventEmitter<Object>();
   @Input() dataType: DataType;
+  @Input() data;
 
   title: Promise<string> | string;
   property: Property;

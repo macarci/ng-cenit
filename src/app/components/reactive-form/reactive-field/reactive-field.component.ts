@@ -10,6 +10,7 @@ import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
 })
 export class ReactiveFieldComponent implements OnInit {
 
+  @Input() data: any;
   @Input() fieldFormControl: FormControl;
   @Input() property: Property;
 
@@ -46,6 +47,7 @@ export class ReactiveFieldComponent implements OnInit {
 @Component({})
 export class BaseFieldControlComponent implements OnInit {
 
+  @Input() data: any;
   @Input() property: Property;
   @Input() fieldControl: FormControl;
 
@@ -56,6 +58,7 @@ export class BaseFieldControlComponent implements OnInit {
   protected description: Promise<string> | string;
 
   ngOnInit() {
+    this.fieldControl.setValue(this.data);
     this.name = this.property.name;
     this.label = this.property.getTitle();
     this.description = this.property.getSchemaEntry<string>('description');

@@ -26,11 +26,13 @@
         <cenit-reactive-array-item [ngSwitch]="itemsSchema['type']" [index]="index" (delete)="deleteAt($event)">
 
           <cenit-reactive-field
+            [data]="data[+itemControl.prop.name]"
             [fieldFormControl]="itemControl.control"
             [property]="itemControl.prop"
             *ngSwitchDefault></cenit-reactive-field>
 
           <cenit-reactive-form-group
+            [data]="data[+itemControl.prop.name]"
             [controls]="false"
             [property]="itemControl.prop"
             [parentControl]="componentFormArray"
@@ -38,6 +40,7 @@
             *ngSwitchCase="'object'"></cenit-reactive-form-group>
 
           <cenit-reactive-form-array
+            [data]="data[+itemControl.prop.name]"
             [property]="itemControl.prop"
             [componentFormArray]="itemControl.control"
             *ngSwitchCase="'array'"></cenit-reactive-form-array>

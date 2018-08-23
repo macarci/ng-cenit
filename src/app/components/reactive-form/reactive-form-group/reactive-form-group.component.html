@@ -27,27 +27,32 @@
       <div [ngSwitch]="propControl.type">
 
         <cenit-reactive-field
+          [data]="data[propControl.prop.name]"
           [fieldFormControl]="propControl.control"
           [property]="propControl.prop"
           *ngSwitchDefault></cenit-reactive-field>
 
         <cenit-reactive-form-group
+          [data]="data[propControl.prop.name]"
           [property]="propControl.prop"
           [parentControl]="componentFormGroup"
           [componentFormGroup]="propControl.control"
           *ngSwitchCase="'object'"></cenit-reactive-form-group>
 
         <cenit-reactive-form-array
+          [data]="data[propControl.prop.name]"
           [property]="propControl.prop"
           [componentFormArray]="propControl.control"
           *ngSwitchCase="'array'"></cenit-reactive-form-array>
 
         <cenit-reactive-form-ref-one
+          [data]="data[propControl.prop.name]"
           [property]="propControl.prop"
           [refControl]="propControl.control"
           *ngSwitchCase="'ref-one'"></cenit-reactive-form-ref-one>
 
         <cenit-reactive-form-ref-many
+          [data]="data[propControl.prop.name]"
           [property]="propControl.prop"
           [componentFormArray]="propControl.control"
           *ngSwitchCase="'ref-many'"></cenit-reactive-form-ref-many>

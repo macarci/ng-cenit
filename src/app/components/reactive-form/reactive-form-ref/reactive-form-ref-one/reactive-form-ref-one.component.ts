@@ -28,7 +28,24 @@ export class ReactiveFormRefOneComponent extends ReactiveFormRefComponent {
   }
 
   protected controlLoaderComplete() {
-    this.controlLoader.complete();
+    if (this.data) {
+      this.property.dataType.apiService.get(['setup', 'data_type', this.property.dataType.id, 'digest'], {
+        query: {id: this.data['_id']},
+        template: {
+          viewport: '{_id ' + this.queryProps.map(p => p.name).join(' ') + '}'
+        }
+      }).subscribe(
+        response => {
+          this.pickItem(this.toItem(response['items'][0]));
+          this.controlLoader.complete();
+        },
+        error => {
+          this.controlLoader.complete();
+        }
+      );
+    } else {
+      this.controlLoader.complete();
+    }
   }
 
   protected controlLoaderError(error) {
@@ -62,5 +79,14 @@ export class ReactiveFormRefOneComponent extends ReactiveFormRefComponent {
       this.requestItems();
       this.trigger.openMenu();
     }, 1000);
+  }
+
+  validateData(data): Object {
+    let id;
+    if (data && data.constructor === Object &&
+      (id = data['_id'] || data['id']) && id.constructor === String) {
+      return {_reference: true, _id: id};
+    }
+    return null;
   }
 }

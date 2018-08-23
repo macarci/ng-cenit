@@ -3,16 +3,19 @@
   </cenit-lazy-loader>
   <div [ngSwitch]="controlType">
     <cenit-enum-control
+      [data]="data"
       [property]="property"
       [fieldControl]="fieldFormControl"
       *ngSwitchCase="'enum'"></cenit-enum-control>
 
     <cenit-boolean-control
+      [data]="data"
       [property]="property"
       [fieldControl]="fieldFormControl"
       *ngSwitchCase="'boolean'"></cenit-boolean-control>
 
     <cenit-input-control
+      [data]="data"
       [property]="property"
       [fieldControl]="fieldFormControl"
       *ngSwitchDefault></cenit-input-control>
