@@ -1,7 +1,6 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {DataType, Property} from '../../services/data-type.service';
-import {LazyLoaderComponent} from '../lazy-loader/lazy-loader.component';
 
 @Component({
   selector: 'cenit-reactive-form',
@@ -10,6 +9,7 @@ import {LazyLoaderComponent} from '../lazy-loader/lazy-loader.component';
 })
 export class ReactiveFormComponent implements OnInit {
 
+  @Output() submit = new EventEmitter<Object>();
   @Input() dataType: DataType;
 
   title: Promise<string> | string;
@@ -27,7 +27,10 @@ export class ReactiveFormComponent implements OnInit {
     this.property = new Property('data', this.dataType);
   }
 
-  onSubmit() {
-    console.log('SUBMITTING: ', JSON.stringify(this.dataGroup.value));
+  doNothing() {
+  }
+
+  getData(): Object {
+    return this.dataGroup.value;
   }
 }

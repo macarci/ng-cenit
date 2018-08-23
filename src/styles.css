@@ -11,3 +11,7 @@
 .restore-tabs .mat-tab-group .mat-tab-header {
   display: flex;
 }
+
+.lazy-loader-container {
+  position: relative;
+}

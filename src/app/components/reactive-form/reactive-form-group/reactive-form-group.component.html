@@ -19,39 +19,39 @@
     <mat-icon>delete</mat-icon>
   </button>
 </div>
-<div class="form-group" [ngClass]="{hidden: hidden}">
+<div class="form-group lazy-loader-container" [ngClass]="{hidden: hidden}">
   <cenit-lazy-loader [passive]="blank">
-    <div [formGroup]="componentFormGroup">
-      <div *ngFor="let propControl of propControls">
-        <div [ngSwitch]="propControl.type">
+  </cenit-lazy-loader>
+  <div [formGroup]="componentFormGroup">
+    <div *ngFor="let propControl of propControls">
+      <div [ngSwitch]="propControl.type">
 
-          <cenit-reactive-field
-            [fieldFormControl]="propControl.control"
-            [property]="propControl.prop"
-            *ngSwitchDefault></cenit-reactive-field>
+        <cenit-reactive-field
+          [fieldFormControl]="propControl.control"
+          [property]="propControl.prop"
+          *ngSwitchDefault></cenit-reactive-field>
 
-          <cenit-reactive-form-group
-            [property]="propControl.prop"
-            [parentControl]="componentFormGroup"
-            [componentFormGroup]="propControl.control"
-            *ngSwitchCase="'object'"></cenit-reactive-form-group>
+        <cenit-reactive-form-group
+          [property]="propControl.prop"
+          [parentControl]="componentFormGroup"
+          [componentFormGroup]="propControl.control"
+          *ngSwitchCase="'object'"></cenit-reactive-form-group>
 
-          <cenit-reactive-form-array
-            [property]="propControl.prop"
-            [componentFormArray]="propControl.control"
-            *ngSwitchCase="'array'"></cenit-reactive-form-array>
+        <cenit-reactive-form-array
+          [property]="propControl.prop"
+          [componentFormArray]="propControl.control"
+          *ngSwitchCase="'array'"></cenit-reactive-form-array>
 
-          <cenit-reactive-form-ref-one
-            [property]="propControl.prop"
-            [refControl]="propControl.control"
-            *ngSwitchCase="'ref-one'"></cenit-reactive-form-ref-one>
+        <cenit-reactive-form-ref-one
+          [property]="propControl.prop"
+          [refControl]="propControl.control"
+          *ngSwitchCase="'ref-one'"></cenit-reactive-form-ref-one>
 
-          <cenit-reactive-form-ref-many
-            [property]="propControl.prop"
-            [componentFormArray]="propControl.control"
-            *ngSwitchCase="'ref-many'"></cenit-reactive-form-ref-many>
-        </div>
+        <cenit-reactive-form-ref-many
+          [property]="propControl.prop"
+          [componentFormArray]="propControl.control"
+          *ngSwitchCase="'ref-many'"></cenit-reactive-form-ref-many>
       </div>
     </div>
-  </cenit-lazy-loader>
+  </div>
 </div>

@@ -1,10 +1,13 @@
-<cenit-lazy-loader>
+<div class="lazy-loader-container">
+  <cenit-lazy-loader>
+  </cenit-lazy-loader>
   <div [ngSwitch]="dataType.type" *ngIf="dataType">
     <cenit-file-upload-form
       [dataType]="dataType"
       [indexContent]="indexContent"
       *ngSwitchCase="'Setup::FileDataType'"></cenit-file-upload-form>
-    <cenit-reactive-form [dataType]="dataType" *ngSwitchDefault></cenit-reactive-form>
+    <cenit-form-controls [dataType]="dataType" *ngSwitchDefault></cenit-form-controls>
   </div>
-</cenit-lazy-loader>
+</div>
+
 

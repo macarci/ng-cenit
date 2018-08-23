@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class DataTypeService {
@@ -405,6 +406,10 @@ export class DataType {
       });
     }
     return nakedSchema;
+  }
+
+  createFrom(data: Object): Observable<Object> {
+    return this.apiService.post(['setup', 'data_type', this.id, 'digest'], data);
   }
 }
 

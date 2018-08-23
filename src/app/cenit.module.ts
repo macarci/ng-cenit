@@ -55,6 +55,7 @@ import {FileUploadFormComponent} from './components/file-upload-form/file-upload
 import {ReactiveFormRefOneComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-one/reactive-form-ref-one.component';
 import {ReactiveFormRefManyComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-many/reactive-form-ref-many.component';
 import {ReactiveArrayItemRefComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-many/reactive-array-item-ref/reactive-array-item-ref.component';
+import {FormControlsComponent} from './components/form-controls/form-controls.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -92,7 +93,8 @@ const appRoutes: Routes = [
     FileUploadFormComponent,
     ReactiveFormRefOneComponent,
     ReactiveFormRefManyComponent,
-    ReactiveArrayItemRefComponent
+    ReactiveArrayItemRefComponent,
+    FormControlsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,7 @@
-<input type="file" multiple="multiple" class="hidden" (change)="filesPicked()" #fileUpload/>
-<cenit-lazy-loader>
+<div class="lazy-loader-container">
+  <cenit-lazy-loader>
+  </cenit-lazy-loader>
+  <input type="file" multiple="multiple" class="hidden" (change)="filesPicked()" #fileUpload/>
   <button mat-button color="primary" (click)="filesPicker()">
     <mat-icon>file_upload</mat-icon>
     Pick files...
@@ -17,5 +19,5 @@
             </span>
     </li>
   </ul>
-</cenit-lazy-loader>
+</div>
 

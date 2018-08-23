@@ -1,4 +1,16 @@
-.shade-loading {
+.controls-container {
+  position: relative;
+}
+
+.form-container {
+  max-height: calc(100vh - 240px);
+  overflow-y: scroll;
+}
+.controls {
+  padding: 5px;
+}
+
+.submit-backdrop {
   position: absolute;
   height: 100%;
   width: 100%;

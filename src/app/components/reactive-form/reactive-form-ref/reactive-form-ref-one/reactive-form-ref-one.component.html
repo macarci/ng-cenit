@@ -1,4 +1,6 @@
-<cenit-lazy-loader #controlLoader>
+<div class="lazy-loader-container">
+  <cenit-lazy-loader #controlLoader>
+  </cenit-lazy-loader>
   <mat-form-field>
     <input
       matInput
@@ -10,14 +12,16 @@
       (focus)="requestItems()"
       #input>
     <mat-menu #menu="matMenu" [overlapTrigger]="false" (closed)="menuClosed()">
-      <cenit-lazy-loader #menuLoader>
+      <div class="lazy-loader-container">
+        <cenit-lazy-loader #menuLoader>
+        </cenit-lazy-loader>
         <button
           mat-menu-item
           *ngFor="let item of items"
           (click)="pickItem(item)">
           {{item.label}}
         </button>
-      </cenit-lazy-loader>
+      </div>
     </mat-menu>
     <mat-hint>{{description | async}}</mat-hint>
   </mat-form-field>
@@ -28,5 +32,5 @@
     <mat-icon>add</mat-icon>
     New
   </button>
-</cenit-lazy-loader>
+</div>
 

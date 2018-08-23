@@ -1,4 +1,6 @@
-<cenit-lazy-loader #lazy_loader>
+<div class="lazy-loader-container">
+  <cenit-lazy-loader type="spinner" #lazy_loader>
+  </cenit-lazy-loader>
   <div class="table-container">
     <table mat-table [dataSource]="items">
       <ng-container
@@ -17,4 +19,4 @@
     [pageSize]="pageSize"
     (page)="requestData(true)"
     *ngIf="count > pageSize"></mat-paginator>
-</cenit-lazy-loader>
+</div>

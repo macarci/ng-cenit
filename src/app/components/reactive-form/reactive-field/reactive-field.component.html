@@ -1,4 +1,6 @@
-<cenit-lazy-loader>
+<div class="lazy-loader-container">
+  <cenit-lazy-loader>
+  </cenit-lazy-loader>
   <div [ngSwitch]="controlType">
     <cenit-enum-control
       [property]="property"
@@ -15,4 +17,4 @@
       [fieldControl]="fieldFormControl"
       *ngSwitchDefault></cenit-input-control>
   </div>
-</cenit-lazy-loader>
+</div>

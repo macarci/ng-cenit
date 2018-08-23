@@ -1,4 +1,6 @@
-<cenit-lazy-loader>
+<div class="lazy-loader-container">
+  <cenit-lazy-loader>
+  </cenit-lazy-loader>
   <mat-form-field>
     <mat-select [placeholder]="label | async" [formControl]="fieldControl">
       <mat-option *ngFor="let value of enumValues; let index = index" [value]="value">
@@ -7,4 +9,4 @@
     </mat-select>
     <mat-hint>{{description | async}}</mat-hint>
   </mat-form-field>
-</cenit-lazy-loader>
+</div>

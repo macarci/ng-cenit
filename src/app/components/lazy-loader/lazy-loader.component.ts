@@ -9,13 +9,13 @@ import {Observable, Observer, Subscription} from 'rxjs';
 export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> {
 
   @Input() passive: boolean;
-  loading = true;
-  errorDescription: string;
+  @Input() loading = true;
   @Input() status: string;
   @Input() type: string;
   @Input() loader: Observable<any>;
   @Input() lazy: Observer<any>;
 
+  failed: boolean;
   subscription: Subscription;
 
   ngOnInit() {
@@ -58,7 +58,7 @@ export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> 
   }
 
   reload() {
-    this.errorDescription = null;
+    this.failed = false;
     this.loading = true;
     this.load();
   }
@@ -68,12 +68,19 @@ export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> 
   }
 
   error(err: any) {
-    this.loading = false;
-    this.errorDescription = err.toString();
+    this.failed = true;
+    this.status = err.toString();
   }
 
   complete() {
+    this.failed = false;
     this.loading = false;
     this.status = 'Completed!';
+  }
+
+  clicked() {
+    if (this.loading && this.failed) {
+      this.loading = false;
+    }
   }
 }

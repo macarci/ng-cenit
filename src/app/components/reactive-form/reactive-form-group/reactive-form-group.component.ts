@@ -34,10 +34,10 @@ export class ReactiveFormGroupComponent implements OnInit {
   ngOnInit() {
     this.title = this.title || this.property.getTitle();
     this.description = this.property.getSchemaEntry('description');
-    if (!this.controls){
-      this.loadForm();
-    } else {
+    if (this.controls){
       this.delete();
+    } else {
+      this.loadForm();
     }
   }
 
