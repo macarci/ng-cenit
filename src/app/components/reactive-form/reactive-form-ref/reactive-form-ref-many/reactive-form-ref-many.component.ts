@@ -54,7 +54,10 @@ export class ReactiveFormRefManyComponent extends ReactiveFormRefComponent {
 
   pickItem(item: RefItem) {
     if (item) {
-      this.componentFormArray.setControl(this.controlItems.length, new FormControl({id: item.id}));
+      this.componentFormArray.setControl(
+        this.controlItems.length,
+        new FormControl({_reference: true, _id: item.id})
+      );
       this.controlItems.push(item);
       this.hidden = false;
     }

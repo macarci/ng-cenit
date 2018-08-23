@@ -45,7 +45,7 @@ export class ReactiveFormRefOneComponent extends ReactiveFormRefComponent {
 
   pickItem(item: RefItem) {
     this.pickedItem = item;
-    this.refControl.setValue(item ? {_id: item.id} : null);
+    this.refControl.setValue(item ? {_reference: true, _id: item.id} : null);
     this.input.nativeElement.value = item ? item.label : null;
   }
 
