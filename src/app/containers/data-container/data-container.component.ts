@@ -125,7 +125,7 @@ export class ModelContent extends DataContent {
   dataTypeId: string;
   dataTypePromise: Promise<DataType>;
 
-  protected constructor(type: string, protected model: string, actionKey: string) {
+  protected constructor(type: string, readonly model: string, actionKey: string) {
     super(type);
     this.setAction(actionKey || '');
   }

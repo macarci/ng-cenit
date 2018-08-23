@@ -2,6 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DataType} from '../../services/data-type.service';
 import {ReactiveFormComponent} from '../reactive-form/reactive-form.component';
 import {LazyLoaderComponent} from '../lazy-loader/lazy-loader.component';
+import {IndexContent} from '../../containers/data-container/data-container.component';
 
 
 @Component({
@@ -14,22 +15,29 @@ export class FormControlsComponent implements OnInit {
   @ViewChild(ReactiveFormComponent) reactiveForm: ReactiveFormComponent;
   @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
 
+  @Input() indexContent: IndexContent;
   @Input() dataType: DataType;
 
+  createdPath: string;
+
   ngOnInit() {
-    this.lazyLoader.loading = false;
+    this.lazyLoader.loading = this.lazyLoader.opened = false;
   }
 
   submit() {
+    this.createdPath = null;
     this.lazyLoader.loading = true;
     this.lazyLoader.next('Submitting...');
     this.dataType.createFrom(this.reactiveForm.getData())
       .subscribe(
         response => {
-          console.log(response);
+          this.reactiveForm.setData({});
+          this.createdPath = '/' + this.indexContent.model + '/' + response['_id'];
           this.lazyLoader.complete();
         },
-        error => this.lazyLoader.error(error)
+        error => {
+          this.lazyLoader.error(error);
+        }
       )
     ;
   }

@@ -6,7 +6,10 @@
       [dataType]="dataType"
       [indexContent]="indexContent"
       *ngSwitchCase="'Setup::FileDataType'"></cenit-file-upload-form>
-    <cenit-form-controls [dataType]="dataType" *ngSwitchDefault></cenit-form-controls>
+    <cenit-form-controls
+      [indexContent]="indexContent"
+      [dataType]="dataType"
+      *ngSwitchDefault></cenit-form-controls>
   </div>
 </div>
 

@@ -18,6 +18,7 @@ export class ReactiveFormGroupComponent implements OnInit {
 
   @ViewChild(LazyLoaderComponent) lazyLoader: LazyLoaderComponent;
 
+  @Input() data: Object;
   @Input() property: Property;
   @Input() parentControl: FormGroup | FormArray;
   @Input() componentFormGroup: FormGroup;
@@ -32,9 +33,10 @@ export class ReactiveFormGroupComponent implements OnInit {
   hidden = true;
 
   ngOnInit() {
+    this.data = this.data || {};
     this.title = this.title || this.property.getTitle();
     this.description = this.property.getSchemaEntry('description');
-    if (this.controls){
+    if (this.controls) {
       this.delete();
     } else {
       this.loadForm();
@@ -120,5 +122,10 @@ export class ReactiveFormGroupComponent implements OnInit {
     } else {
       (<FormArray>this.parentControl).setControl(+this.property.name, this.nullControl);
     }
+  }
+
+  setData(data: Object) {
+    this.data = data || {};
+    this.loadForm();
   }
 }

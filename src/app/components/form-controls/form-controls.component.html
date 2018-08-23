@@ -1,5 +1,15 @@
 <div class="controls-container lazy-loader-container">
-  <cenit-lazy-loader type="spinner">
+  <cenit-lazy-loader type="spinner" [closeOnComplete]="false">
+    <div *ngIf="createdPath" fxLayout="column" fxLayoutAlign="space-around center" >
+      <a mat-raised-button [routerLink]="createdPath" color="accent">
+        <mat-icon>open_in_new</mat-icon>
+        Created record
+      </a>
+      <button mat-raised-button>
+        <mat-icon>add</mat-icon>
+        Add another
+      </button>
+    </div>
   </cenit-lazy-loader>
   <div class="form-container">
     <cenit-reactive-form [dataType]="dataType"></cenit-reactive-form>

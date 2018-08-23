@@ -409,7 +409,12 @@ export class DataType {
   }
 
   createFrom(data: Object): Observable<Object> {
-    return this.apiService.post(['setup', 'data_type', this.id, 'digest'], data);
+    return this.apiService.post(
+      ['setup', 'data_type', this.id, 'digest'], data, {
+        template: {
+          viewport: '{_id}'
+        }
+      });
   }
 }
 

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {DataType, Property} from '../../services/data-type.service';
+import {ReactiveFormGroupComponent} from './reactive-form-group/reactive-form-group.component';
 
 @Component({
   selector: 'cenit-reactive-form',
@@ -8,6 +9,8 @@ import {DataType, Property} from '../../services/data-type.service';
   styleUrls: ['./reactive-form.component.css']
 })
 export class ReactiveFormComponent implements OnInit {
+
+  @ViewChild(ReactiveFormGroupComponent) dataForm: ReactiveFormGroupComponent;
 
   @Output() submit = new EventEmitter<Object>();
   @Input() dataType: DataType;
@@ -32,5 +35,9 @@ export class ReactiveFormComponent implements OnInit {
 
   getData(): Object {
     return this.dataGroup.value;
+  }
+
+  setData(data: Object) {
+    this.dataForm.setData(data);
   }
 }
