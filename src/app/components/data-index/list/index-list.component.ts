@@ -46,7 +46,11 @@ export class IndexListComponent implements OnInit {
       this.apiService.get(this.indexContent.getApiParams(), {query: {page: page}}).subscribe(
         response => {
           this.data = response;
-          this.items = response['items'];
+          this.items = response['items'].map(
+            item => {
+              return {...item, '$': '/' + this.indexContent.getPath() + '/' + item['_id']};
+            }
+          );
           this.count = response['count'];
           if (this.dataType) {
             subscriber.complete();
@@ -80,17 +84,18 @@ export class IndexListComponent implements OnInit {
               Promise.all(
                 props.map(
                   p => new Promise<Property>(
-                  (res, rej) => {
-                    Promise.all([p.isSimple(), p.isVisible()])
-                      .then(takeIt => res(
-                        takeIt[0] && takeIt[1] ? p : null
-                      )).catch(e => rej(e));
-                  }
-                ))
+                    (res, rej) => {
+                      Promise.all([p.isSimple(), p.isVisible()])
+                        .then(
+                          takeIt => res(takeIt[0] && takeIt[1] ? p : null)
+                        )
+                        .catch(e => rej(e));
+                    }
+                  ))
               ).then(
                 (indexProps: Array<Property>) => {
                   this.indexProperties = indexProps.filter(p => p);
-                  this.displayedColumns = this.indexProperties.map(p => p.name);
+                  this.displayedColumns = this.indexProperties.map(p => p.name).concat('$');
                   resolve();
                 }
               ).catch(handleError);

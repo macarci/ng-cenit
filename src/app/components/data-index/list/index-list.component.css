@@ -1,3 +1,7 @@
+.list-container{
+  min-height: 100px;
+}
+
 .data-container {
   height: calc(100vh - 194px);
 }

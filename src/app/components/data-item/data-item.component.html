@@ -1,10 +1,13 @@
 <div class="controls-container lazy-loader-container">
   <cenit-lazy-loader type="spinner">
+    <button mat-raised-button (click)="delete()" *ngIf="!data">
+      Item not found
+    </button>
   </cenit-lazy-loader>
   <div class="form-container" *ngIf="dataType && data">
     <cenit-reactive-form [dataType]="dataType" [data]="data"></cenit-reactive-form>
   </div>
-  <div class="controls">
+  <div class="controls" *ngIf="data">
     <button mat-button color="primary" (click)="update()">
       <mat-icon>update</mat-icon>
       Update

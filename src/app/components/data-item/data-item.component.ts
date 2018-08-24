@@ -24,7 +24,7 @@ export class DataItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.lazyLoader.loading = this.lazyLoader.opened = false;
+    this.lazyLoader.frozen = true;
     this.itemContent.getDataType()
       .then(
         (dataType: DataType) => {
@@ -33,6 +33,7 @@ export class DataItemComponent implements OnInit {
             .subscribe(
               response => {
                 this.data = response;
+                this.lazyLoader.frozen = false;
                 this.lazyLoader.complete();
               },
               error => this.lazyLoader.error(error)
@@ -58,18 +59,22 @@ export class DataItemComponent implements OnInit {
   }
 
   delete() {
-    if (confirm('Confirm delete?')) {
-      this.lazyLoader.reload();
-      this.lazyLoader.next('Deleting...');
-      this.dataType.apiService.delete(this.itemContent.getApiParams())
-        .subscribe(
-          response => {
-            this.deleted.emit();
-          },
-          error => {
-            this.lazyLoader.error(error);
-          }
-        );
+    if (this.data) {
+      if (confirm('Confirm delete?')) {
+        this.lazyLoader.reload();
+        this.lazyLoader.next('Deleting...');
+        this.dataType.apiService.delete(this.itemContent.getApiParams())
+          .subscribe(
+            response => {
+              this.deleted.emit();
+            },
+            error => {
+              this.lazyLoader.error(error);
+            }
+          );
+      }
+    } else {
+      this.deleted.emit();
     }
   }
 }

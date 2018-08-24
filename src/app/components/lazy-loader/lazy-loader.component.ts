@@ -16,6 +16,7 @@ export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> 
   @Input() type: string;
   @Input() loader: Observable<any>;
   @Input() lazy: Observer<any>;
+  @Input() frozen: boolean;
 
   failed: boolean;
   completed: boolean;
@@ -88,7 +89,7 @@ export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> 
   }
 
   clicked() {
-    if ((this.loading || this.opened) && (this.failed || this.completed)) {
+    if ((this.loading || this.opened) && (this.failed || this.completed) && !this.frozen) {
       this.loading = false;
       this.close();
     }
