@@ -5,6 +5,7 @@ import {LazyLoaderComponent} from '../../lazy-loader/lazy-loader.component';
 import {MatPaginator} from '@angular/material';
 import {DataType, DataTypeService, Property} from '../../../services/data-type.service';
 import {IndexContent} from '../../../containers/data-container/data-container.component';
+import {SelectionModel} from '@angular/cdk/collections';
 
 @Component({
   selector: 'cenit-data-index-list',
@@ -26,6 +27,8 @@ export class IndexListComponent implements OnInit {
   indexProperties: Property[];
 
   displayedColumns: string[];
+  selection = new SelectionModel<Object>(true, []);
+
 
   constructor(private apiService: ApiService, private dataTypeService: DataTypeService) {
   }
@@ -48,9 +51,10 @@ export class IndexListComponent implements OnInit {
           this.data = response;
           this.items = response['items'].map(
             item => {
-              return {...item, '$': '/' + this.indexContent.getPath() + '/' + item['_id']};
+              return {...item, '$actions': '/' + this.indexContent.getPath() + '/' + item['_id']};
             }
           );
+          this.selection.clear();
           this.count = response['count'];
           if (this.dataType) {
             subscriber.complete();
@@ -95,7 +99,11 @@ export class IndexListComponent implements OnInit {
               ).then(
                 (indexProps: Array<Property>) => {
                   this.indexProperties = indexProps.filter(p => p);
-                  this.displayedColumns = this.indexProperties.map(p => p.name).concat('$');
+                  this.displayedColumns = [
+                    '$select',
+                    ...this.indexProperties.map(p => p.name),
+                    '$actions'
+                  ];
                   resolve();
                 }
               ).catch(handleError);
@@ -106,5 +114,17 @@ export class IndexListComponent implements OnInit {
         }
       }
     );
+  }
+
+  isAllSelected(): boolean {
+    return this.selection.selected.length === this.items.length;
+  }
+
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.items.forEach(item => this.selection.select(item));
+    }
   }
 }
