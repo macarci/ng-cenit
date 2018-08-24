@@ -51,7 +51,7 @@ export class IndexListComponent implements OnInit {
           this.data = response;
           this.items = response['items'].map(
             item => {
-              return {...item, '$actions': '/' + this.indexContent.getPath() + '/' + item['_id']};
+              return {...item, '$actions': '/' + this.indexContent.getApiParams().join('~') + '/' + item['_id']};
             }
           );
           this.selection.clear();
