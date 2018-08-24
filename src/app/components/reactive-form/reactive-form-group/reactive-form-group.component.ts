@@ -97,7 +97,10 @@ export class ReactiveFormGroupComponent implements OnInit {
           )
         ).then((ctrls: Array<GroupPropertyControl>) => {
           ctrls.forEach(
-            ctrl => this.componentFormGroup.addControl(ctrl.prop.name, ctrl.control)
+            ctrl => {
+              this.componentFormGroup.removeControl(ctrl.prop.name);
+              this.componentFormGroup.addControl(ctrl.prop.name, ctrl.control);
+            }
           );
           this.propControls = ctrls;
           if (this.parentControl.constructor === FormGroup) {
