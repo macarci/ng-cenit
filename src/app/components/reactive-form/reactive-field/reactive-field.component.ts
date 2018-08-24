@@ -44,7 +44,10 @@ export class ReactiveFieldComponent implements OnInit {
   }
 }
 
-@Component({})
+@Component({
+  selector: 'cenit-base-field-control',
+  template: ''
+})
 export class BaseFieldControlComponent implements OnInit {
 
   @Input() data: any;
@@ -53,9 +56,9 @@ export class BaseFieldControlComponent implements OnInit {
 
   @ViewChild(LazyLoaderComponent) lazyLoader;
 
-  protected name: string;
-  protected label: Promise<string> | string;
-  protected description: Promise<string> | string;
+  name: string;
+  label: Promise<string> | string;
+  description: Promise<string> | string;
 
   ngOnInit() {
     this.fieldControl.setValue(this.data);

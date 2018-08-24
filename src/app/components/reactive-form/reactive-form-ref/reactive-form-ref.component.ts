@@ -1,7 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Property} from '../../../services/data-type.service';
 
-@Component({})
+@Component({
+  selector: 'cenit-reactive-form-ref',
+  template: ''
+})
 export class ReactiveFormRefComponent implements OnInit {
 
   @Input() data;

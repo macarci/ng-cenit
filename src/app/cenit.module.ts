@@ -46,7 +46,7 @@ import {IndexCreateComponent} from './components/data-index/create/index-create.
 import {ReactiveFormComponent} from './components/reactive-form/reactive-form.component';
 import {ReactiveFormGroupComponent} from './components/reactive-form/reactive-form-group/reactive-form-group.component';
 import {ReactiveFormArrayComponent} from './components/reactive-form/reactive-form-array/reactive-form-array.component';
-import {ReactiveFieldComponent} from './components/reactive-form/reactive-field/reactive-field.component';
+import {BaseFieldControlComponent, ReactiveFieldComponent} from './components/reactive-form/reactive-field/reactive-field.component';
 import {ReactiveArrayItemComponent} from './components/reactive-form/reactive-form-array/reactive-array-item/reactive-array-item.component';
 import {InputControlComponent} from './components/reactive-form/reactive-field/input-control/input-control.component';
 import {EnumControlComponent} from './components/reactive-form/reactive-field/enum-control/enum-control.component';
@@ -56,6 +56,7 @@ import {ReactiveFormRefOneComponent} from './components/reactive-form/reactive-f
 import {ReactiveFormRefManyComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-many/reactive-form-ref-many.component';
 import {ReactiveArrayItemRefComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref-many/reactive-array-item-ref/reactive-array-item-ref.component';
 import {FormControlsComponent} from './components/form-controls/form-controls.component';
+import {ReactiveFormRefComponent} from './components/reactive-form/reactive-form-ref/reactive-form-ref.component';
 
 const appRoutes: Routes = [
   {path: 'authorize', component: AuthorizeComponent},
@@ -87,11 +88,13 @@ const appRoutes: Routes = [
     ReactiveFormArrayComponent,
     ReactiveFieldComponent,
     ReactiveArrayItemComponent,
+    BaseFieldControlComponent,
     InputControlComponent,
     EnumControlComponent,
     BooleanControlComponent,
     FileUploadFormComponent,
     ReactiveFormRefOneComponent,
+    ReactiveFormRefComponent,
     ReactiveFormRefManyComponent,
     ReactiveArrayItemRefComponent,
     FormControlsComponent
