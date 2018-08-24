@@ -14,7 +14,9 @@
     <ng-template #bar>
       <mat-progress-bar [mode]="passive ? 'determinate' : 'indeterminate'"></mat-progress-bar>
     </ng-template>
-    <span>{{status}}</span>
+    <mat-card>
+      <span>{{status | json}}</span>
+    </mat-card>
   </ng-template>
 </div>
 

@@ -1,5 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Observer, Subscription} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'cenit-lazy-loader',
@@ -72,8 +73,11 @@ export class LazyLoaderComponent implements OnInit, OnDestroy, Observer<string> 
   }
 
   error(err: any) {
+    if (err.constructor == HttpErrorResponse) {
+      err = (<HttpErrorResponse>err).error;
+    }
     this.failed = true;
-    this.status = err.toString();
+    this.status = err;
   }
 
   complete() {

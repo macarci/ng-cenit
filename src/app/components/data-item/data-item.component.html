@@ -1,8 +1,8 @@
 <div class="controls-container lazy-loader-container">
   <cenit-lazy-loader type="spinner">
-    <span *ngIf="data; else not_found">
-      {{lazyLoader.status}}
-    </span>
+    <mat-card *ngIf="data; else not_found">
+      {{lazyLoader.status | json}}
+    </mat-card>
     <ng-template #not_found>
       <button mat-raised-button (click)="delete()">
         Item not found
