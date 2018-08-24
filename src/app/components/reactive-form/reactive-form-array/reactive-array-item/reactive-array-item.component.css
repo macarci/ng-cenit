@@ -1,3 +1,4 @@
-.right {
+.right-top {
+  z-index: 1;
   float: right;
 }
