@@ -6,6 +6,7 @@
   max-height: calc(100vh - 240px);
   overflow-y: scroll;
 }
+
 .controls {
   padding: 5px;
 }

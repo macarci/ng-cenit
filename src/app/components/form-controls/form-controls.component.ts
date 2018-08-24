@@ -39,7 +39,6 @@ export class FormControlsComponent implements OnInit {
         error => {
           this.lazyLoader.error(error);
         }
-      )
-    ;
+      );
   }
 }
