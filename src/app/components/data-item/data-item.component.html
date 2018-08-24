@@ -1,1 +1,17 @@
-Working on item...
+<div class="controls-container lazy-loader-container">
+  <cenit-lazy-loader type="spinner">
+  </cenit-lazy-loader>
+  <div class="form-container" *ngIf="dataType && data">
+    <cenit-reactive-form [dataType]="dataType" [data]="data"></cenit-reactive-form>
+  </div>
+  <div class="controls">
+    <button mat-button color="primary" (click)="update()">
+      <mat-icon>update</mat-icon>
+      Update
+    </button>
+    <button mat-button color="warn" (click)="delete()">
+      <mat-icon>delete</mat-icon>
+      Delete
+    </button>
+  </div>
+</div>

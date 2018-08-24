@@ -96,12 +96,18 @@ export class ReactiveFormGroupComponent implements OnInit {
             )
           )
         ).then((ctrls: Array<GroupPropertyControl>) => {
+          this.componentFormGroup.removeControl('_reset');
+          const resetting = [];
           ctrls.forEach(
             ctrl => {
               this.componentFormGroup.removeControl(ctrl.prop.name);
               this.componentFormGroup.addControl(ctrl.prop.name, ctrl.control);
+              if (ctrl.type == 'array' || ctrl.type == 'ref-many') {
+                resetting.push(ctrl.prop.name);
+              }
             }
           );
+          this.componentFormGroup.addControl('_reset', new FormControl(resetting));
           this.propControls = ctrls;
           if (this.parentControl.constructor === FormGroup) {
             (<FormGroup>this.parentControl).setControl(this.property.name, this.componentFormGroup);

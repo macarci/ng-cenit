@@ -39,6 +39,27 @@ export class ApiService {
     });
   }
 
+  delete<T>(params: string[], options?: RequestOptions): Observable<T> {
+    options = options || {};
+    return new Observable<T>((subscriber: Observer<T>) => {
+      this.httpRequestOptionsFrom(options)
+        .then(
+          reqOptions => {
+            this.httpClient.delete(this.apiURL(params), reqOptions)
+              .subscribe(
+                (response: T) => {
+                  subscriber.next(response);
+                },
+                error => {
+                  subscriber.error(error);
+                },
+                () => subscriber.complete()
+              );
+          })
+        .catch(error => subscriber.error(error));
+    });
+  }
+
   post(params: string[], body: any, options?: RequestOptions): Observable<Object> {
     return new Observable<Object>(subscriber => {
       this.httpRequestOptionsFrom(options)

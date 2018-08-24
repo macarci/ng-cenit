@@ -1,0 +1,11 @@
+.controls-container {
+  position: relative;
+}
+.form-container {
+  height: calc(100vh - 176px);
+  overflow-y: scroll;
+}
+
+.controls {
+  padding: 5px;
+}

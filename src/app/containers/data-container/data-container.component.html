@@ -11,7 +11,7 @@
       <div [ngSwitch]="content['type']">
         <cenit-data-dashboard *ngSwitchCase="'dashboard'"></cenit-data-dashboard>
         <cenit-data-index [indexContent]="content" *ngSwitchCase="'index'"></cenit-data-index>
-        <cenit-data-item [itemContent]="content" *ngSwitchCase="'item'"></cenit-data-item>
+        <cenit-data-item [itemContent]="content" *ngSwitchCase="'item'" (deleted)="removeIndex(index)"></cenit-data-item>
       </div>
     </div>
   </mat-tab>
