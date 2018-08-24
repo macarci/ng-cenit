@@ -23,9 +23,12 @@
     </table>
   </div>
   <mat-paginator
+    [ngClass]="{hidden: lazy_loader.loading}"
     [hidePageSize]="true"
     [length]="count"
     [pageSize]="pageSize"
     (page)="requestData(true)"
-    *ngIf="count > pageSize"></mat-paginator>
+    *ngIf="count > pageSize">
+
+  </mat-paginator>
 </div>

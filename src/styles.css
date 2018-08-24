@@ -15,3 +15,7 @@
 .lazy-loader-container {
   position: relative;
 }
+
+.hidden {
+  display: none;
+}
