@@ -120,7 +120,7 @@ export class ReactiveFormRefManyComponent extends ReactiveFormRefComponent {
 
   validateData(data): Object[] {
     if (data && data.constructor === Array) {
-      return (<Array>data).map(
+      return (<Array<any>>data).map<Object>(
         item => {
           let id;
           if (item && item.constructor === Object &&
