@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ApiService} from '../../services/api.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
@@ -18,6 +18,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class MainNavigationComponent implements OnInit {
 
+  @Output() itemSelected = new EventEmitter();
   @Input() showLabels = false;
   @Input() switchLabelsEnabled = false;
 
@@ -105,5 +106,9 @@ export class MainNavigationComponent implements OnInit {
       },
       handleError
     );
+  }
+
+  itemClicked() {
+    this.itemSelected.emit();
   }
 }

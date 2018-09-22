@@ -8,13 +8,15 @@
       </mat-expansion-panel-header>
 
       <mat-nav-list>
-        <a
-          mat-list-item
-          *ngFor="let subItem of item.items"
-          [routerLink]="subItem.path">
+        <span class="mat-content" *ngFor="let subItem of item.items">
           <mat-icon class="nav-icon">{{subItem.icon}}</mat-icon>
-          <span class="nav-label" [@labels]="showLabels ? 'showing' : 'hiding'">{{subItem.title}}</span>
-        </a>
+          <a
+            mat-list-item
+            [routerLink]="subItem.path"
+            (click)="itemClicked()">
+            <span class="nav-label" [@labels]="showLabels ? 'showing' : 'hiding'">{{subItem.title}}</span>
+          </a>
+        </span>
       </mat-nav-list>
 
     </mat-expansion-panel>

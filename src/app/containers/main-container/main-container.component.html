@@ -1,9 +1,9 @@
-<cenit-toolbar (menuClick)="main_nav.setSwitchingEnable(!switchSideNav())"></cenit-toolbar>
-<mat-sidenav-container class="main-container" hasBackdrop="false" autosize>
-  <mat-sidenav #sidenav [mode]="main_nav.switchingEnable() ? 'over' : 'side'" opened>
-    <cenit-navigation-main [switchLabelsEnabled]="!fixedSideNav" #main_nav></cenit-navigation-main>
+<cenit-toolbar (menuClick)="menuClicked()"></cenit-toolbar>
+<mat-sidenav-container class="main-container" [hasBackdrop]="mobileQuery.matches" autosize>
+  <mat-sidenav #sidenav [mode]="mobileQuery.matches || mainNavigation.switchingEnable() ? 'over' : 'side'" [opened]="!mobileQuery.matches">
+    <cenit-navigation-main [switchLabelsEnabled]="!fixedSideNav" (itemSelected)="navItemSelected()"></cenit-navigation-main>
   </mat-sidenav>
-  <div [ngClass]="{'switching-main-content': main_nav.switchingEnable()}">
+  <div [ngClass]="{'switching-main-content': !mobileQuery.matches && mainNavigation.switchingEnable()}">
     <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>
