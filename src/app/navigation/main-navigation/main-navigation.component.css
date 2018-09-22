@@ -1,3 +1,9 @@
 .nav-icon {
   margin-right: 5px;
 }
+
+.nav-label {
+  text-overflow: clip;
+  overflow: hidden;
+  white-space: nowrap;
+}

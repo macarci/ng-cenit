@@ -1,10 +1,10 @@
 <div (mouseenter)="setLabelsVisible(true)" (mouseleave)="setLabelsVisible(false)">
-  <mat-accordion displayMode="flat">
+  <mat-accordion displayMode="flat" [multi]="true" [displayMode]="'flat'">
     <mat-expansion-panel
       *ngFor="let item of items">
       <mat-expansion-panel-header>
         <mat-icon class="nav-icon">{{item.icon}}</mat-icon>
-        <span *ngIf="showLabels">{{item.title}}</span>
+        <span [@labels]="showLabels ? 'showing' : 'hiding'">{{item.title}}</span>
       </mat-expansion-panel-header>
 
       <mat-nav-list>
@@ -13,7 +13,7 @@
           *ngFor="let subItem of item.items"
           [routerLink]="subItem.path">
           <mat-icon class="nav-icon">{{subItem.icon}}</mat-icon>
-          <span *ngIf="showLabels">{{subItem.title}}</span>
+          <span class="nav-label" [@labels]="showLabels ? 'showing' : 'hiding'">{{subItem.title}}</span>
         </a>
       </mat-nav-list>
 

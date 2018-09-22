@@ -1,15 +1,25 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from '../../services/api.service';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'cenit-navigation-main',
   templateUrl: './main-navigation.component.html',
-  styleUrls: ['./main-navigation.component.css']
+  styleUrls: ['./main-navigation.component.css'],
+  animations: [
+    trigger('labels', [
+      state('showing', style({width: '200px'})),
+      state('hiding', style({width: '0px'})),
+      transition('showing <=> hiding', [
+        animate(300)
+      ])
+    ])
+  ]
 })
 export class MainNavigationComponent implements OnInit {
 
   @Input() showLabels = false;
-  @Input() switchLabelsEnabled = true;
+  @Input() switchLabelsEnabled = false;
 
   defaultTypes = [];
   types = this.defaultTypes;
@@ -46,6 +56,10 @@ export class MainNavigationComponent implements OnInit {
   setSwitchingEnable(enable) {
     this.switchLabelsEnabled = enable;
     this.setLabelsVisible(!enable);
+  }
+
+  switchingEnable(): boolean {
+    return this.switchLabelsEnabled;
   }
 
   setLabelsVisible(show) {
