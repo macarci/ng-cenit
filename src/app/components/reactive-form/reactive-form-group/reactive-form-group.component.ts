@@ -31,6 +31,7 @@ export class ReactiveFormGroupComponent implements OnInit {
   label: Promise<string> | string;
   blank = true;
   hidden = true;
+  formLoaded = -1;
 
   ngOnInit() {
     this.title = this.title || this.property.getTitle();
@@ -44,9 +45,14 @@ export class ReactiveFormGroupComponent implements OnInit {
   }
 
   loadForm() {
+    this.formLoaded = 0;
     this.blank = Object.keys(this.data).length === 0;
     this.hidden = this.controls && !this.blank;
     this.label = '<new>';
+    const handleLoadFormError = (error) => {
+      this.formLoaded = -1;
+      this.lazyLoader.error(error);
+    };
     this.property.dataType.visibleProps()
       .then((props: Array<Property>) => {
         Promise.all(
@@ -114,15 +120,17 @@ export class ReactiveFormGroupComponent implements OnInit {
           } else {
             (<FormArray>this.parentControl).setControl(+this.property.name, this.componentFormGroup);
           }
+          this.formLoaded = 1;
           this.lazyLoader.complete();
         })
-          .catch(error => this.lazyLoader.error(error));
+          .catch(handleLoadFormError);
       })
-      .catch(error => this.lazyLoader.error(error));
+      .catch(handleLoadFormError);
   }
 
   delete() {
     this.hidden = this.blank = true;
+    this.formLoaded = -1;
     this.data = {};
     this.label = null;
     if (!this.nullControl) {

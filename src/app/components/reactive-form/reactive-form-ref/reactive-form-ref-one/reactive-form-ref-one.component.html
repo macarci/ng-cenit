@@ -1,36 +1,39 @@
 <div class="lazy-loader-container">
   <cenit-lazy-loader #controlLoader>
   </cenit-lazy-loader>
-  <mat-form-field>
-    <input
-      matInput
-      [name]="property.name"
-      [placeholder]="title | async"
-      (input)="typing()"
-      [matMenuTriggerFor]="menu"
-      autocomplete="off"
-      (focus)="requestItems()"
-      #input>
-    <mat-menu #menu="matMenu" [overlapTrigger]="false" (closed)="menuClosed()">
-      <div class="lazy-loader-container">
-        <cenit-lazy-loader #menuLoader>
-        </cenit-lazy-loader>
-        <button
-          mat-menu-item
-          *ngFor="let item of items"
-          (click)="pickItem(item)">
-          {{item.label}}
-        </button>
-      </div>
-    </mat-menu>
-    <mat-hint>{{description | async}}</mat-hint>
-  </mat-form-field>
-  <button mat-icon-button color="warn" (click)="pickItem(null)" *ngIf="pickedItem">
-    <mat-icon>delete</mat-icon>
-  </button>
-  <button mat-button color="primary">
-    <mat-icon>add</mat-icon>
-    New
-  </button>
+  <div class="field-controls">
+    <mat-form-field class="fill-space">
+      <input
+        matInput
+        [name]="property.name"
+        [placeholder]="title | async"
+        (input)="typing()"
+        [matMenuTriggerFor]="menu"
+        autocomplete="off"
+        (focus)="requestItems()"
+        #input>
+      <mat-menu #menu="matMenu" [overlapTrigger]="false" (closed)="menuClosed()">
+        <div class="lazy-loader-container">
+          <cenit-lazy-loader #menuLoader>
+          </cenit-lazy-loader>
+          <button
+            mat-menu-item
+            *ngFor="let item of items"
+            (click)="pickItem(item)">
+            {{item.label}}
+          </button>
+        </div>
+      </mat-menu>
+      <mat-hint>{{description | async}}</mat-hint>
+    </mat-form-field>
+    <button mat-icon-button color="warn" (click)="pickItem(null)" *ngIf="pickedItem">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-button color="primary">
+      <mat-icon>add</mat-icon>
+      New
+    </button>
+
+  </div>
 </div>
 

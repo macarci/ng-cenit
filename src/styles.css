@@ -19,3 +19,24 @@
 .hidden {
   display: none;
 }
+
+.field-control {
+  width: 100%;
+}
+.field-control:hover {
+  background: white;
+}
+
+
+.field-controls{
+  width: 100%;
+  display: inline-flex;
+}
+
+.field-controls:hover {
+  background: white;
+}
+
+.fill-space {
+  flex: 1 1 auto;
+}

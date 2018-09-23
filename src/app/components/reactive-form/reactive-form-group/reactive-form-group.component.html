@@ -1,5 +1,5 @@
-<div *ngIf="controls">
-  <mat-form-field>
+<div *ngIf="controls" class="field-controls">
+  <mat-form-field class="fill-space">
     <input
       matInput
       [placeholder]="title | async"
@@ -8,19 +8,19 @@
       [value]="label ? label : null">
     <mat-hint>{{description | async}}</mat-hint>
   </mat-form-field>
-  <button mat-button (click)="loadForm()" *ngIf="blank" color="primary">
+  <button mat-button (click)="loadForm()" *ngIf="formLoaded < 0" color="primary">
     <mat-icon>add</mat-icon>
     New
   </button>
-  <button mat-icon-button *ngIf="!blank" (click)="hidden = !hidden">
+  <button mat-icon-button *ngIf="formLoaded > 0" (click)="hidden = !hidden">
     <mat-icon>{{'arrow_drop_' + (hidden ? 'down' : 'up')}}</mat-icon>
   </button>
-  <button mat-icon-button color="warn" *ngIf="!blank" (click)="delete()">
+  <button mat-icon-button color="warn" *ngIf="formLoaded > 0" (click)="delete()">
     <mat-icon>delete</mat-icon>
   </button>
 </div>
 <div class="form-group lazy-loader-container" [ngClass]="{hidden: hidden}">
-  <cenit-lazy-loader [passive]="blank">
+  <cenit-lazy-loader [passive]="!formLoaded">
   </cenit-lazy-loader>
   <div [formGroup]="componentFormGroup">
     <div *ngFor="let propControl of propControls">

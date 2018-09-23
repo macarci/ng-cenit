@@ -1,22 +1,24 @@
 <div class="lazy-loader-container">
   <cenit-lazy-loader>
   </cenit-lazy-loader>
-  <mat-form-field>
-    <input
-      matInput
-      [placeholder]="title | async"
-      readonly
-      autocomplete="off"
-      [value]="label">
-    <mat-hint>{{description | async}}</mat-hint>
-  </mat-form-field>
-  <button mat-icon-button *ngIf="itemControls.length > 0" (click)="hidden = !hidden">
-    <mat-icon>{{'arrow_drop_' + (hidden ? 'down' : 'up')}}</mat-icon>
-  </button>
-  <button mat-button color="primary" (click)="addNewItem()">
-    <mat-icon>add</mat-icon>
-    New
-  </button>
+  <div class="field-controls">
+    <mat-form-field class="fill-space">
+      <input
+        matInput
+        [placeholder]="title | async"
+        readonly
+        autocomplete="off"
+        [value]="label">
+      <mat-hint>{{description | async}}</mat-hint>
+    </mat-form-field>
+    <button mat-icon-button *ngIf="itemControls.length > 0" (click)="hidden = !hidden">
+      <mat-icon>{{'arrow_drop_' + (hidden ? 'down' : 'up')}}</mat-icon>
+    </button>
+    <button mat-button color="primary" (click)="addNewItem()">
+      <mat-icon>add</mat-icon>
+      New
+    </button>
+  </div>
   <div [formGroup]="componentFormArray" class="form-array" [ngClass]="{hidden: hidden}">
     <mat-tab-group>
       <mat-tab *ngFor="let itemControl of itemControls; let index = index">
